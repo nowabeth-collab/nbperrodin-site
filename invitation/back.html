@@ -1,0 +1,78 @@
+<!-- Formal invitation — BACK (the details side).
+     Same 5.25in x 7.25in (5x7 + bleed). Photo strip on the left, details on the right.
+     Open this file in a browser to preview; invitation-5x7.pdf is the print-ready export. -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Invitation — back</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400&display=swap">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  @page { size: 5.25in 7.25in; margin: 0; }
+  html, body { margin: 0; }
+  body { width: 5.25in; height: 7.25in; background: #F4F0E9; font-family: 'Jost', Helvetica, Arial, sans-serif; color: #3A3833; overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .card { position: relative; width: 5.25in; height: 7.25in; display: flex; }
+  .photo { width: 2.05in; height: 100%; background: url('../assets/photos/card-front.jpg') center 30% / cover no-repeat; }
+  .details { position: relative; flex: 1; display: flex; flex-direction: column; padding: 0.5in 0.42in 0.5in 0.36in; }
+  .close { margin-top: auto; padding-top: 10pt; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 12.5pt; color: #4E5B44; line-height: 1.3; }
+  .close .sig { display: block; font-style: normal; font-size: 10pt; letter-spacing: 0.08em; color: #B98E8C; margin-top: 3pt; }
+  .garland { width: 1.75in; display: block; margin: 0 0 4pt -0.03in; }
+  h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 19pt; font-weight: 500; color: #4E5B44; margin: 0 0 8pt; line-height: 1.1; }
+  .row { margin: 0 0 8.5pt; }
+  .lbl { font-size: 6.5pt; letter-spacing: 0.24em; text-transform: uppercase; color: #B98E8C; margin: 0 0 1.5pt; }
+  .val { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 12pt; line-height: 1.25; color: #3A3833; }
+  .sub { font-size: 7.5pt; font-weight: 300; line-height: 1.45; color: #7A736A; margin-top: 1pt; }
+  .rsvp { display: flex; align-items: center; gap: 0.12in; margin-top: 2pt; }
+  .rsvp .qr { width: 0.8in; height: 0.8in; flex: none; }
+  .rsvp .val { font-size: 11.5pt; }
+  .url { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 13pt; color: #4E5B44; }
+  .divider { height: 1px; background: #D8CFC2; margin: 9pt 0; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="photo"></div>
+  <div class="details">
+    <img class="garland" src="../assets/florals/garland.webp" alt="">
+    <h1>The details</h1>
+
+    <div class="row">
+      <div class="lbl">Ceremony</div>
+      <div class="val">Five o&rsquo;clock in the evening</div>
+      <div class="sub">In the chapel at Camp Hosea.</div>
+    </div>
+    <div class="row">
+      <div class="lbl">Reception</div>
+      <div class="val">To follow</div>
+      <div class="sub">In the reception hall beside the lake, right after the ceremony.</div>
+    </div>
+    <div class="row">
+      <div class="lbl">Getting there</div>
+      <div class="val">Camp Hosea</div>
+      <div class="sub">17476 FM 3090, Anderson, TX 77830<br>About 1 hr 20 min north of Houston and 25 min from College Station. Everything happens in one place.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="row">
+      <div class="lbl">Kindly reply by November 1</div>
+      <div class="rsvp">
+        <img class="qr" src="../assets/qr-rsvp.png" alt="">
+        <div>
+          <div class="val">RSVP online at</div>
+          <div class="url">nbperrodin.com/rsvp</div>
+          <div class="sub">Scan the code or type the address.</div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="lbl">Registry &amp; more</div>
+      <div class="sub">Our registry, directions, the calendar invite and our story are all at <strong>nbperrodin.com</strong>.</div>
+    </div>
+
+    <div class="close">We can&rsquo;t wait to celebrate with you.<span class="sig">Noah &amp; Bethany</span></div>
+  </div>
+</div>
+</body>
+</html>

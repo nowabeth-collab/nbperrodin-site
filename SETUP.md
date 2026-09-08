@@ -61,6 +61,16 @@ Visiting the web app URL (the `formEndpoint`) in a browser shows the current tot
 
 The back has a stamp box and address lines, so cards can be hand-addressed or take a label printed from the mailing-list CSV.
 
+## The formal invitation
+
+`invitation/` has the 5x7 flat invitation:
+
+- `invitation-5x7.pdf` — print-ready, 2 pages (front, back), 5.25 × 7.25 in including 1/8 in bleed. Order as a "5x7 flat card, full bleed, printed both sides" (Vistaprint, Shutterfly, Minted "upload your design", or a local print shop). A5/5x7 envelopes fit it.
+- `preview-front.jpg`, `preview-back.jpg` — quick look.
+- `front.html`, `back.html` — editable source. The RSVP-by date (November 1) and the details copy live in `back.html`; the QR code points to nbperrodin.com/rsvp (`assets/qr-rsvp.png`).
+
+Mail invitations 6–8 weeks before the wedding (early-to-mid October).
+
 ## Changing the website
 
 Everything a normal edit needs is in **`assets/config.js`**: names, date, venue, registry links, wedding party (names, roles, photos in `assets/photos/party/`), the photo-album link, gallery photo list, and the hero image. Colors and fonts are at the top of `assets/styles.css`.
@@ -77,4 +87,4 @@ Edit `apps-script/Code.gs`, paste it into the Apps Script editor, save, then **D
 
 - Paste the Google Photos shared-album link into `assets/config.js` → `photoAlbumUrl` (Photos → Albums → the album → Share → Create link, with "Collaborate" on).
 - Wedding party photos: drop square-ish JPGs in `assets/photos/party/` and set each person's `photo` in `config.js`.
-- Order the cards once the address list has filled in — the wedding is Nov 28, so aim to mail save-the-dates as early as possible and invitations 6–8 weeks out (early-to-mid October).
+- Order the save-the-dates as soon as the address list has filled in, then the invitations 6–8 weeks out (early-to-mid October). Both PDFs are ready.
