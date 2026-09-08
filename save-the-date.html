@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Save the Date · Noah &amp; Bethany</title>
+  <meta name="description" content="Save the date for Noah and Bethany's wedding — November 28, 2026, Anderson, Texas. Share your mailing address so we can send your card.">
+  <meta property="og:title" content="Save the Date · Noah & Bethany · 11.28.2026">
+  <meta property="og:description" content="Add it to your calendar and send us your address so we can mail your save the date.">
+  <meta property="og:image" content="https://nbperrodin.com/assets/photos/og-image.jpg">
+  <meta property="og:url" content="https://nbperrodin.com/save-the-date">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body data-page="save-the-date.html">
+  <header id="site-header"></header>
+
+  <main>
+    <section class="section center">
+      <div class="wrap page-head">
+        <div class="head-floral" data-floral="br"></div>
+        <p class="eyebrow">Save the date</p>
+        <h1>11 · 28 · 2026</h1>
+        <p class="hero-date" data-fill="event.dateText">Saturday, November 28, 2026</p>
+        <p class="hero-place" data-fill="event.city">Anderson, TX</p>
+        <div class="rule center"></div>
+        <p>Formal invitation to follow. For now, block off the Saturday after Thanksgiving and let us know where to mail your card.</p>
+
+        <div class="btn-row" style="justify-content:center">
+          <a class="btn" id="gcal-link" href="#" target="_blank" rel="noopener">Add to Google Calendar</a>
+          <a class="btn ghost" id="ics-link" href="#" download="nbperrodin-wedding.ics">Apple / Outlook (.ics)</a>
+        </div>
+
+        <div class="details">
+          <div>
+            <div class="lbl">When</div>
+            <h3 data-fill="event.dateText">Saturday, November 28, 2026</h3>
+            <p data-fill="event.timeText">Ceremony at 4:00 PM · Reception to follow</p>
+          </div>
+          <div>
+            <div class="lbl">Where</div>
+            <h3 data-fill="event.venueName">Venue</h3>
+            <p><a data-href="event.mapsUrl" href="#" target="_blank" rel="noopener"><span data-fill="event.venueAddress">Anderson, Texas</span></a></p>
+          </div>
+          <div>
+            <div class="lbl">Attire</div>
+            <h3 data-fill="event.dressCode">Cocktail attire</h3>
+            <p>Boots welcome.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section band">
+      <div class="band-floral tl" data-floral="tl"></div>
+      <div class="wrap">
+        <div class="center">
+          <p class="eyebrow">Where should we mail your card?</p>
+          <h2>Send us your address</h2>
+          <p>We're mailing physical save-the-dates. Fill this out once per household and we'll take it from there.</p>
+        </div>
+
+        <form class="form-card has-corner" id="std-form" novalidate>
+          <div class="corner-br" data-floral="br"></div>
+          <div class="form-grid">
+            <div>
+              <label for="firstName">First name</label>
+              <input id="firstName" name="firstName" autocomplete="given-name" required>
+            </div>
+            <div>
+              <label for="lastName">Last name</label>
+              <input id="lastName" name="lastName" autocomplete="family-name" required>
+            </div>
+            <div class="full">
+              <label for="householdNames">Others in your household (optional)</label>
+              <input id="householdNames" name="householdNames" placeholder="e.g. Sarah &amp; the kids">
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required>
+            </div>
+            <div>
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" required>
+            </div>
+            <div class="full">
+              <label for="address1">Street address</label>
+              <input id="address1" name="address1" autocomplete="address-line1" required>
+            </div>
+            <div class="full">
+              <label for="address2">Apt / unit (optional)</label>
+              <input id="address2" name="address2" autocomplete="address-line2">
+            </div>
+            <div>
+              <label for="city">City</label>
+              <input id="city" name="city" autocomplete="address-level2" required>
+            </div>
+            <div>
+              <label for="state">State</label>
+              <input id="state" name="state" autocomplete="address-level1" maxlength="2" placeholder="TX" required>
+            </div>
+            <div>
+              <label for="zip">ZIP</label>
+              <input id="zip" name="zip" autocomplete="postal-code" inputmode="numeric" required>
+            </div>
+            <div>
+              <label for="country">Country</label>
+              <input id="country" name="country" autocomplete="country-name" value="United States">
+            </div>
+            <div class="full">
+              <label for="note">Anything we should know? (optional)</label>
+              <textarea id="note" name="note" rows="2"></textarea>
+            </div>
+            <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
+          </div>
+          <div class="form-foot">
+            <button class="btn" type="submit">Send my address</button>
+            <p class="form-note">We'll only use this to mail your card and share wedding updates.</p>
+          </div>
+        </form>
+        <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+  <script src="assets/config.js"></script>
+  <script src="assets/site.js"></script>
+  <script src="assets/florals.js"></script>
+</body>
+</html>
