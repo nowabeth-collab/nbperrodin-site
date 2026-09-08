@@ -56,6 +56,7 @@ p  { margin: 0 0 1em; max-width: var(--measure); }
   letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold);
   margin: 0 0 0.9rem;
 }
+.eyebrow.center { max-width: none; }
 .rule { width: 56px; height: 1px; background: var(--gold); margin: 1.4rem 0; }
 .rule.center { margin-left: auto; margin-right: auto; }
 .center { text-align: center; }
@@ -242,3 +243,39 @@ input:focus, select:focus, textarea:focus { border-color: var(--pine); backgroun
 .share-wreath .share-inner .btn { font-size: clamp(0.62rem, 2.4vw, 0.8rem); padding: 0.65rem 0.9rem; letter-spacing: 0.1em; white-space: normal; line-height: 1.3; max-width: 100%; }
 
 .thanks-banner { max-width: 640px; margin: 0 auto 1.4rem; text-align: center; }
+
+/* --- Venue page --------------------------------------------- */
+.venue-lead { margin-top: 2.5rem; }
+.venue-lead figure { margin: 0; }
+.venue-lead img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius); }
+.venue-lead figcaption, .venue-grid figcaption { font-family: var(--display); font-style: italic; color: var(--ink-soft); margin-top: 0.5rem; text-align: center; }
+.venue-placeholder { aspect-ratio: 16 / 9; min-height: 0; border-radius: var(--radius); }
+.venue-about { max-width: 720px; margin: 2.5rem auto 0; text-align: center; }
+.venue-about h2 { margin-bottom: 0.4rem; }
+.venue-about .venue-loc { color: var(--ink-soft); font-size: 0.9rem; letter-spacing: 0.04em; margin-bottom: 1.4rem; }
+.venue-about p { margin-inline: auto; }
+.venue-about .btn-row { justify-content: center; }
+.venue-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 2.5rem; }
+.venue-grid figure { margin: 0; }
+.venue-grid img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); }
+.venue-video { margin-top: 3.5rem; }
+.video-frame { position: relative; max-width: 900px; margin: 0 auto; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; background: var(--paper-2); box-shadow: 0 10px 30px rgba(58,56,51,0.12); }
+.video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.video-cap { text-align: center; color: var(--ink-soft); font-size: 0.9rem; margin: 0.8rem auto 0; font-style: italic; font-family: var(--display); font-size: 1.05rem; }
+.venue-links { margin-top: 3.5rem; }
+.link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; max-width: 900px; margin: 0 auto; }
+.link-card { position: relative; display: block; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem 2.4rem 1.1rem 1.2rem; text-decoration: none; color: var(--ink); transition: border-color 0.15s ease, transform 0.15s ease; }
+.link-card:hover { border-color: var(--gold); transform: translateY(-1px); }
+.link-card .lc-label { display: block; font-family: var(--display); font-size: 1.25rem; color: var(--pine); line-height: 1.2; }
+.link-card .lc-note { display: block; font-size: 0.82rem; color: var(--ink-soft); margin-top: 0.25rem; }
+.link-card .lc-arrow { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 1.1rem; }
+
+/* --- Scroll cue (Save the Date) ----------------------------- */
+.scroll-cue { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; margin: 3rem auto 0; text-decoration: none; color: var(--gold); width: max-content; }
+.scroll-cue-text { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; }
+.scroll-cue-arrows { display: flex; flex-direction: column; align-items: center; height: 42px; }
+.scroll-cue-arrows i { display: block; width: 14px; height: 14px; border-right: 1.5px solid var(--gold); border-bottom: 1.5px solid var(--gold); transform: rotate(45deg); margin-top: -6px; opacity: 0.35; animation: cue 1.8s ease-in-out infinite; }
+.scroll-cue-arrows i:nth-child(2) { animation-delay: 0.25s; }
+.scroll-cue-arrows i:nth-child(3) { animation-delay: 0.5s; }
+@keyframes cue { 0%, 100% { opacity: 0.25; transform: rotate(45deg) translate(0, 0); } 50% { opacity: 1; transform: rotate(45deg) translate(3px, 3px); } }
+.scroll-cue:hover .scroll-cue-text { color: var(--pine); }

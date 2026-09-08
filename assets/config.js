@@ -68,6 +68,35 @@ window.SITE = {
     { name: "Michael Perrodin",    role: "Groomsman", photo: "", note: "" },
   ],
 
+  // --- Venue showcase page ------------------------------------
+  venue: {
+    name: "Camp Hosea",
+    tagline: "A chapel, a lake, and 300 of our favorite people.",
+    location: "Anderson, Texas — about 1 hr 20 min north of Houston, 25 min from College Station",
+    website: "https://www.camphosea.com/",
+    about: [
+      "Camp Hosea sits on open Texas countryside outside Anderson, with a lake at its center and manicured grounds all around it. The chapel is oak beams and whitewashed wood with wrought-iron doors brought over from Spain and a bell tower above.",
+      "After the ceremony, the reception hall's floor-to-ceiling wall of windows keeps the lake and the grounds in view all night, and the courtyard opens onto the water for cocktails. Everything is on one property, so the whole day happens in one place.",
+    ],
+    // Drop venue photos in assets/photos/venue/ and list them here (first one is the big one).
+    // A drone shot of the property makes the best lead image.
+    photos: [
+      // { src: "assets/photos/venue/drone.jpg", caption: "Camp Hosea from above" },
+    ],
+    // Embedded YouTube video (just the ID from the URL after v=). Leave "" for none.
+    youtubeId: "F2jA3WVG8Y4",
+    youtubeCaption: "A couple's walkthrough of the chapel, hall, and grounds",
+    // Links shown as cards under "See more"
+    links: [
+      { label: "Camp Hosea on Instagram", url: "https://www.instagram.com/camp.hosea/", note: "The venue's own photos and reels" },
+      { label: "Reel: venue tour", url: "https://www.instagram.com/reel/C7NKGF_uJFv/", note: "Camp Hosea on Instagram" },
+      { label: "Reel: planning at Camp Hosea", url: "https://www.instagram.com/reel/DLVZm8NyIu2/", note: "Camp Hosea on Instagram" },
+      { label: "Camp Hosea on Facebook", url: "https://www.facebook.com/camphoseavenue/", note: "Real weddings and updates" },
+      { label: "Camp Hosea on TikTok", url: "https://www.tiktok.com/discover/camp-hosea", note: "Short videos from couples and the venue" },
+      { label: "Venue website", url: "https://www.camphosea.com/", note: "Official details" },
+    ],
+  },
+
   // --- Gallery (proposal + engagement photos) -----------------
   // Drop images in assets/photos/gallery/ and list them here in order.
   // Add a caption to any photo: { src: "...", caption: "She said yes" }

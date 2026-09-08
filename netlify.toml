@@ -7,6 +7,10 @@
   to = "/save-the-date.html"
   status = 200
 [[redirects]]
+  from = "/venue"
+  to = "/venue.html"
+  status = 200
+[[redirects]]
   from = "/wedding-party"
   to = "/wedding-party.html"
   status = 200

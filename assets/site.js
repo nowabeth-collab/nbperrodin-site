@@ -7,6 +7,7 @@
   const NAV = [
     ["index.html", "Welcome"],
     ["save-the-date.html", "Save the Date"],
+    ["venue.html", "The Venue"],
     ["wedding-party.html", "Wedding Party"],
     ["registry.html", "Registry"],
     ["gallery.html", "Gallery"],
@@ -152,6 +153,43 @@
     const name = thanks === "1" ? "" : ", " + thanks;
     cal.insertAdjacentHTML("beforebegin", `<div class="form-status ok thanks-banner" role="status">Thank you${escapeHtml(name)}! Your address is in. One last thing — add the day to your calendar below.</div>`);
     setTimeout(() => cal.scrollIntoView({ behavior: "smooth", block: "center" }), 300);
+  }
+
+  /* ---------- Venue page ---------- */
+  const venueRoot = document.getElementById("venue");
+  if (venueRoot && S.venue) {
+    const V = S.venue;
+    const lead = V.photos[0];
+    const rest = V.photos.slice(1);
+    venueRoot.innerHTML = `
+      <div class="venue-lead">
+        ${lead ? `<figure><img src="${lead.src}" alt="${escapeHtml(lead.caption || V.name)}">${lead.caption ? `<figcaption>${escapeHtml(lead.caption)}</figcaption>` : ""}</figure>`
+               : `<div class="photo-placeholder venue-placeholder">Venue photo coming soon</div>`}
+      </div>
+      <div class="venue-about">
+        <p class="eyebrow">About the venue</p>
+        <h2>The chapel, the hall, and the lake</h2>
+        <p class="venue-loc">${escapeHtml(V.location)}</p>
+        ${V.about.map((t) => `<p>${escapeHtml(t)}</p>`).join("")}
+        <div class="btn-row">
+          <a class="btn" href="${S.event.mapsUrl}" target="_blank" rel="noopener">Directions</a>
+          <a class="btn ghost" href="${V.website}" target="_blank" rel="noopener">Venue website</a>
+        </div>
+      </div>
+      ${rest.length ? `<div class="venue-grid">${rest.map((p) => `<figure><img src="${p.src}" alt="${escapeHtml(p.caption || V.name)}" loading="lazy">${p.caption ? `<figcaption>${escapeHtml(p.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : ""}
+      ${V.youtubeId ? `
+      <div class="venue-video">
+        <p class="eyebrow center">Take a look around</p>
+        <div class="video-frame"><iframe src="https://www.youtube-nocookie.com/embed/${V.youtubeId}?rel=0" title="${escapeHtml(V.name)} video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+        ${V.youtubeCaption ? `<p class="video-cap">${escapeHtml(V.youtubeCaption)}</p>` : ""}
+      </div>` : ""}
+      ${V.links.length ? `
+      <div class="venue-links">
+        <p class="eyebrow center">See more</p>
+        <div class="link-grid">
+          ${V.links.map((l) => `<a class="link-card" href="${l.url}" target="_blank" rel="noopener"><span class="lc-label">${escapeHtml(l.label)}</span>${l.note ? `<span class="lc-note">${escapeHtml(l.note)}</span>` : ""}<span class="lc-arrow">→</span></a>`).join("")}
+        </div>
+      </div>` : ""}`;
   }
 
   /* ---------- Wedding party ---------- */
