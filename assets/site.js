@@ -239,6 +239,26 @@
       group("The Groomsmen", `Standing with ${S.couple.partner1}`, S.groomsmen, "groom");
   }
 
+  /* ---------- "Who will be there" — accepted guests, live from the RSVP sheet ---------- */
+  const guestList = document.getElementById("guest-list");
+  const guestsSection = document.getElementById("guests");
+  if (guestList && guestsSection && S.showGuestList !== false && S.formEndpoint && !S.formEndpoint.startsWith("PASTE_")) {
+    const countEl = document.getElementById("guests-count");
+    guestsSection.hidden = false;
+    fetch(S.formEndpoint + "?list=guests", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        const names = Array.isArray(data.guests) ? data.guests : [];
+        if (!names.length) {
+          countEl.textContent = "The first replies are just starting to come in — check back soon.";
+          return;
+        }
+        countEl.textContent = `${names.length} ${names.length === 1 ? "guest has" : "guests have"} said yes so far.`;
+        guestList.innerHTML = names.map((n) => `<li>${escapeHtml(n)}</li>`).join("");
+      })
+      .catch(() => { guestsSection.hidden = true; });
+  }
+
   /* ---------- Registry ---------- */
   const regRoot = document.getElementById("registry");
   if (regRoot) {

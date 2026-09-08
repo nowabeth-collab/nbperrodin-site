@@ -44,6 +44,11 @@ window.SITE = {
     // { name: "Honeymoon Fund", url: "https://...", blurb: "..." },
   ],
 
+  // --- "Who will be there" (Wedding Party page) ----------------
+  // Lists the first + last names of everyone who RSVPs yes, pulled live from the RSVP sheet.
+  // Set to false to hide the section.
+  showGuestList: true,
+
   // --- Guest photo sharing (QR code points to /photos) -------
   // Create a shared album in Google Photos → Share → "Get link", paste it here.
   photoAlbumUrl: "PASTE_YOUR_GOOGLE_PHOTOS_SHARED_ALBUM_LINK_HERE",

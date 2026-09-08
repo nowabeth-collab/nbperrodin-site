@@ -322,3 +322,8 @@ body[data-page="save-the-date.html"] .scroll-cue { margin-top: 1.5rem; }
 .choice input { width: auto; margin: 0; accent-color: var(--pine); }
 .choice:has(input:checked) { border-color: var(--pine); background: #fff; color: var(--pine); }
 .rsvp-choice[aria-invalid="true"] .choice { border-color: #B5514A; }
+
+/* "Who will be there" (wedding party page) */
+.section-alt { background: var(--paper-2); }
+.guest-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem 0.75rem; list-style: none; margin: 1.5rem auto 0; padding: 0; max-width: 56rem; }
+.guest-list li { font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.2rem; color: var(--pine); padding: 0.4rem 1rem; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.55); }

@@ -139,9 +139,28 @@ function ics_() {
 
 function esc_(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
 
-// Visiting the /exec URL in a browser shows this — handy to confirm it's deployed.
-function doGet() {
+// Visiting the /exec URL in a browser shows totals — handy to confirm it's deployed.
+// The website's "Who will be there" section calls /exec?list=guests (names only, accepted guests).
+function doGet(e) {
+  var p = (e && e.parameter) || {};
+  if (p.list === "guests") return json_({ ok: true, guests: guestNames_(), updated: new Date().toISOString() });
   return json_({ ok: true, service: "nbperrodin RSVP", totals: totals_(), cardsToMail: pendingCards_().length });
+}
+
+/** First + last names of everyone who accepted, plus the extra guests they listed. Nothing else leaves the sheet. */
+function guestNames_() {
+  var seen = {}, out = [];
+  readRows_().forEach(function (r) {
+    if (r.attending !== "yes") return;
+    var names = [(r.firstName + " " + r.lastName).trim()];
+    String(r.guestNames || "").split(/\s*(?:,|;|\n|&|\band\b)\s*/i).forEach(function (n) { if (n && n.trim()) names.push(n.trim()); });
+    names.forEach(function (n) {
+      n = n.replace(/\s+/g, " ").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+      var key = n.toLowerCase();
+      if (!seen[key]) { seen[key] = true; out.push(n); }
+    });
+  });
+  return out.sort(function (a, b) { return a.localeCompare(b); });
 }
 
 /** Run once from the editor: creates/repairs the header row and the Mailing List tab. */
