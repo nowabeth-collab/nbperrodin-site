@@ -1,5 +1,5 @@
 /**
- * nbperrodin.com — Save-the-Date address collector
+ * nbperrodin.com — RSVP + address collector
  * ------------------------------------------------
  * Receives form submissions from the website and appends them to a
  * Google Sheet. Optional: emails Noah on every new submission.
@@ -25,7 +25,7 @@ var SHEET_NAME = "Submissions";
 var NOTIFY_EMAIL = "noahvideographer@gmail.com"; // set to "" to disable notifications
 
 var COLUMNS = [
-  "submittedAt", "firstName", "lastName", "householdNames", "email", "phone",
+  "submittedAt", "attending", "firstName", "lastName", "guestCount", "guestNames", "email", "phone",
   "address1", "address2", "city", "state", "zip", "country", "note", "source",
   "mailed", "lobId"  // filled in later by the Lob script
 ];
@@ -47,10 +47,10 @@ function doPost(e) {
     if (NOTIFY_EMAIL) {
       MailApp.sendEmail({
         to: NOTIFY_EMAIL,
-        subject: "New save-the-date address: " + data.firstName + " " + data.lastName,
+        subject: (data.attending === "yes" ? "RSVP YES (" + (data.guestCount || 1) + "): " : "RSVP no: ") + data.firstName + " " + data.lastName,
         body:
-          data.firstName + " " + data.lastName +
-          (data.householdNames ? " (+ " + data.householdNames + ")" : "") + "\n" +
+          (data.attending === "yes" ? "ACCEPTS — " + (data.guestCount || 1) + " attending" + (data.guestNames ? ": " + data.guestNames : "") : "DECLINES") + "\n\n" +
+          data.firstName + " " + data.lastName + "\n" +
           data.address1 + (data.address2 ? ", " + data.address2 : "") + "\n" +
           data.city + ", " + data.state + " " + data.zip + "\n\n" +
           "Email: " + data.email + "\nPhone: " + data.phone +

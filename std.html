@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Save the Date · Noah &amp; Bethany · 11.28.2026</title>
-  <meta name="description" content="Noah and Bethany are getting married November 28, 2026 in Anderson, Texas. Send us your address and we'll mail your save the date.">
+  <title>RSVP · Noah &amp; Bethany · 11.28.2026</title>
+  <meta name="description" content="Noah and Bethany are getting married November 28, 2026 in Anderson, Texas. RSVP and send us your address.">
   <meta property="og:title" content="Save the Date · Noah & Bethany · 11.28.2026">
-  <meta property="og:description" content="We're getting married! Send us your mailing address so we can send your save the date.">
+  <meta property="og:description" content="We're getting married! RSVP and send us your mailing address for your save the date.">
   <meta property="og:image" content="https://nbperrodin.com/assets/photos/og-image.jpg">
   <meta property="og:url" content="https://nbperrodin.com/std">
   <meta name="robots" content="noindex">
@@ -37,18 +37,25 @@
   <main>
     <section class="std-top">
       <div class="head-arch" data-floral="arch"></div>
-      <p class="eyebrow">Save the date</p>
+      <p class="eyebrow">Save the date &amp; RSVP</p>
       <h1>11 · 28 · 2026</h1>
       <p class="names">Noah <em>&amp;</em> Bethany</p>
       <p class="hero-place"><span data-fill="event.venueName">Camp Hosea</span> · <span data-fill="event.city">Anderson, TX</span></p>
       <div class="rule center"></div>
-      <p class="lead">We're getting married, and we'd love for you to be there. Tell us where to mail your save-the-date card and we'll take it from there.</p>
+      <p class="lead">We're getting married, and we'd love for you to be there. Let us know if you can make it, and where to mail your save-the-date and invitation.</p>
     </section>
 
     <section class="std-form-wrap">
       <form class="form-card has-corner" id="std-form" data-redirect="save-the-date.html?thanks=1#calendar" novalidate>
         <div class="corner-br" data-floral="br"></div>
         <div class="form-grid">
+          <div class="full rsvp-choice">
+            <span class="lbl-like">Will you be joining us?</span>
+            <div class="choice-row">
+              <label class="choice"><input type="radio" name="attending" value="yes" required><span>Joyfully accepts</span></label>
+              <label class="choice"><input type="radio" name="attending" value="no"><span>Regretfully declines</span></label>
+            </div>
+          </div>
           <div>
             <label for="firstName">First name</label>
             <input id="firstName" name="firstName" autocomplete="given-name" required>
@@ -57,9 +64,15 @@
             <label for="lastName">Last name</label>
             <input id="lastName" name="lastName" autocomplete="family-name" required>
           </div>
-          <div class="full">
-            <label for="householdNames">Others in your household (optional)</label>
-            <input id="householdNames" name="householdNames" placeholder="e.g. Sarah &amp; the kids">
+          <div class="attending-only">
+            <label for="guestCount">Number attending (including you)</label>
+            <select id="guestCount" name="guestCount">
+              <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+            </select>
+          </div>
+          <div class="attending-only">
+            <label for="guestNames">Names of everyone attending</label>
+            <input id="guestNames" name="guestNames" placeholder="e.g. Sarah Smith, Ben Smith">
           </div>
           <div>
             <label for="email">Email</label>
@@ -93,11 +106,15 @@
             <label for="country">Country</label>
             <input id="country" name="country" autocomplete="country-name" value="United States">
           </div>
+          <div class="full">
+            <label for="note">Dietary restrictions or anything we should know (optional)</label>
+            <textarea id="note" name="note" rows="2"></textarea>
+          </div>
           <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
         </div>
         <div class="form-foot">
-          <button class="btn" type="submit">Send my address</button>
-          <p class="form-note">Next: add the day to your calendar. We'll only use this to mail your card and share wedding updates.</p>
+          <button class="btn" type="submit">Send RSVP</button>
+          <p class="form-note">We'll use your address to mail your save-the-date and invitation.</p>
         </div>
       </form>
       <div class="form-status" id="form-status" role="status" aria-live="polite"></div>

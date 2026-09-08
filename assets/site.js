@@ -6,7 +6,7 @@
   /* ---------- Header + footer (same on every page) ---------- */
   const NAV = [
     ["index.html", "Welcome"],
-    ["save-the-date.html", "Save the Date"],
+    ["save-the-date.html", "Save the Date & RSVP"],
     ["venue.html", "The Venue"],
     ["wedding-party.html", "Wedding Party"],
     ["registry.html", "Registry"],
@@ -105,16 +105,19 @@
       e.preventDefault();
       if (form.website.value) return; // honeypot filled → bot
       // Required-field check with a friendly message (form has novalidate)
-      const missing = [...form.querySelectorAll("[required]")].filter((f) => !f.value.trim());
+      const missing = [...form.querySelectorAll("[required]")].filter((f) => f.type === "radio" ? !form.querySelector(`[name="${f.name}"]:checked`) : !f.value.trim());
       const emailBad = form.email.value && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.value.trim());
       status.className = "form-status";
       if (missing.length || emailBad) {
         missing.forEach((f) => f.setAttribute("aria-invalid", "true"));
         status.textContent = missing.length ? "Please fill in the highlighted fields." : "That email address doesn't look right.";
-        status.classList.add("err"); (missing[0] || form.email).focus(); return;
+        status.classList.add("err"); (missing[0] || form.email).focus();
+        if (missing[0] && missing[0].type === "radio") missing[0].closest(".rsvp-choice").setAttribute("aria-invalid", "true");
+        return;
       }
       form.querySelectorAll("[aria-invalid]").forEach((f) => f.removeAttribute("aria-invalid"));
       const data = Object.fromEntries(new FormData(form).entries());
+      if (data.attending === "no") { data.guestCount = "0"; data.guestNames = ""; }
       delete data.website;
       data.submittedAt = new Date().toISOString();
       data.source = location.href;
@@ -131,11 +134,13 @@
         });
         if (form.dataset.redirect) {
           submitBtn.textContent = "Saved — one more step…";
-          const url = form.dataset.redirect.replace("?thanks=1", "?thanks=" + encodeURIComponent(data.firstName));
+          const url = form.dataset.redirect.replace("?thanks=1", "?thanks=" + encodeURIComponent(data.firstName) + "&rsvp=" + data.attending);
           location.href = url; return;
         }
         form.hidden = true;
-        status.innerHTML = `<strong>Thank you, ${escapeHtml(data.firstName)}!</strong> We have your address — watch your mailbox for the save the date. Don't forget to add the day to your calendar above.`;
+        status.innerHTML = data.attending === "yes"
+          ? `<strong>Thank you, ${escapeHtml(data.firstName)} — we can't wait to see you!</strong> Your RSVP is in and we have your address. Don't forget to add the day to your calendar above.`
+          : `<strong>Thank you, ${escapeHtml(data.firstName)}.</strong> We're sorry you can't make it — we'll miss you, and we're grateful you let us know.`;
         status.classList.add("ok");
         status.scrollIntoView({ behavior: "smooth", block: "center" });
       } catch (err) {
@@ -147,13 +152,25 @@
   }
 
   /* ---------- "Thanks" banner after the standalone form ---------- */
-  const thanks = new URLSearchParams(location.search).get("thanks");
+  const qs = new URLSearchParams(location.search);
+  const thanks = qs.get("thanks");
   const cal = document.getElementById("calendar");
   if (thanks && cal) {
     const name = thanks === "1" ? "" : ", " + thanks;
-    cal.insertAdjacentHTML("beforebegin", `<div class="form-status ok thanks-banner" role="status">Thank you${escapeHtml(name)}! Your address is in. One last thing — add the day to your calendar below.</div>`);
+    const declined = qs.get("rsvp") === "no";
+    cal.insertAdjacentHTML("beforebegin", declined
+      ? `<div class="form-status ok thanks-banner" role="status">Thank you${escapeHtml(name)}. We're sorry you can't make it — we'll miss you, and we're grateful you let us know.</div>`
+      : `<div class="form-status ok thanks-banner" role="status">Thank you${escapeHtml(name)} — we can't wait to see you! Your RSVP is in. One last thing: add the day to your calendar below.</div>`);
     setTimeout(() => cal.scrollIntoView({ behavior: "smooth", block: "center" }), 300);
   }
+
+  /* ---------- RSVP: hide guest fields when declining ---------- */
+  document.querySelectorAll('#std-form input[name="attending"]').forEach((r) => {
+    r.addEventListener("change", () => {
+      const yes = r.value === "yes" && r.checked;
+      document.querySelectorAll("#std-form .attending-only").forEach((el) => { el.hidden = !yes; });
+    });
+  });
 
   /* ---------- Venue page ---------- */
   const venueRoot = document.getElementById("venue");

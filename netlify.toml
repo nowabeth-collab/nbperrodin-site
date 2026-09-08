@@ -32,6 +32,10 @@
   to = "/std.html"
   status = 200
 [[redirects]]
+  from = "/rsvp"
+  to = "/std.html"
+  status = 200
+[[redirects]]
   from = "/savethedate"
   to = "/std.html"
   status = 200

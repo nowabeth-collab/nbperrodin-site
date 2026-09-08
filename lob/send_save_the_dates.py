@@ -109,8 +109,9 @@ def main():
                 print(f"  !!    {name}: address problem — {addr}")
                 w.writerow({"email": email, "name": name, "status": "address_problem", "reason": addr}); continue
 
-            household = row.get("householdNames", "").strip()
-            to_name = name if not household else f"{name} & {household}"[:40]
+            if (row.get("attending") or "").strip().lower() == "no":
+                print(f"  skip  {name} (declined)"); continue
+            to_name = name[:40]
             payload = {
                 "description": f"Save the date — {name}",
                 "to": {"name": to_name, **addr},

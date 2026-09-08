@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Save the Date · Noah &amp; Bethany</title>
+  <title>Save the Date &amp; RSVP · Noah &amp; Bethany</title>
   <meta name="description" content="Save the date for Noah and Bethany's wedding — November 28, 2026, Anderson, Texas. Share your mailing address so we can send your card.">
   <meta property="og:title" content="Save the Date · Noah & Bethany · 11.28.2026">
   <meta property="og:description" content="Add it to your calendar and send us your address so we can mail your save the date.">
@@ -29,7 +29,7 @@
         <p class="hero-date" data-fill="event.dateText">Saturday, November 28, 2026</p>
         <p class="hero-place" data-fill="event.city">Anderson, TX</p>
         <div class="rule center"></div>
-        <p>Formal invitation to follow. For now, block off the Saturday after Thanksgiving and let us know where to mail your card.</p>
+        <p>Formal invitation to follow. For now, block off the Saturday after Thanksgiving and RSVP below.</p>
 
         <div class="btn-row" id="calendar" style="justify-content:center">
           <a class="btn" id="gcal-link" href="#" target="_blank" rel="noopener">Add to Google Calendar</a>
@@ -54,26 +54,33 @@
           </div>
         </div>
 
-        <a class="scroll-cue" href="#address" aria-label="Scroll down to send us your address">
-          <span class="scroll-cue-text">Send us your address</span>
+        <a class="scroll-cue" href="#rsvp" aria-label="Scroll down to RSVP">
+          <span class="scroll-cue-text">RSVP below</span>
           <span class="scroll-cue-arrows" aria-hidden="true"><i></i><i></i><i></i></span>
         </a>
       </div>
     </section>
 
-    <section class="section band" id="address">
+    <section class="section band" id="rsvp">
       <div class="band-bouquet" data-floral="bouquet"></div>
       <div class="band-bouquet right" data-floral="bouquet"></div>
       <div class="wrap">
         <div class="center">
-          <p class="eyebrow">Where should we mail your card?</p>
-          <h2>Send us your address</h2>
-          <p>We're mailing physical save-the-dates. Fill this out once per household and we'll take it from there.</p>
+          <p class="eyebrow">RSVP</p>
+          <h2>Let us know you're coming</h2>
+          <p>One response per household, please. Your address is where we'll mail your save-the-date and invitation.</p>
         </div>
 
         <form class="form-card has-corner" id="std-form" novalidate>
           <div class="corner-br" data-floral="br"></div>
           <div class="form-grid">
+            <div class="full rsvp-choice">
+              <span class="lbl-like">Will you be joining us?</span>
+              <div class="choice-row">
+                <label class="choice"><input type="radio" name="attending" value="yes" required><span>Joyfully accepts</span></label>
+                <label class="choice"><input type="radio" name="attending" value="no"><span>Regretfully declines</span></label>
+              </div>
+            </div>
             <div>
               <label for="firstName">First name</label>
               <input id="firstName" name="firstName" autocomplete="given-name" required>
@@ -82,9 +89,15 @@
               <label for="lastName">Last name</label>
               <input id="lastName" name="lastName" autocomplete="family-name" required>
             </div>
-            <div class="full">
-              <label for="householdNames">Others in your household (optional)</label>
-              <input id="householdNames" name="householdNames" placeholder="e.g. Sarah &amp; the kids">
+            <div class="attending-only">
+              <label for="guestCount">Number attending (including you)</label>
+              <select id="guestCount" name="guestCount">
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              </select>
+            </div>
+            <div class="attending-only">
+              <label for="guestNames">Names of everyone attending</label>
+              <input id="guestNames" name="guestNames" placeholder="e.g. Sarah Smith, Ben Smith">
             </div>
             <div>
               <label for="email">Email</label>
@@ -119,14 +132,14 @@
               <input id="country" name="country" autocomplete="country-name" value="United States">
             </div>
             <div class="full">
-              <label for="note">Anything we should know? (optional)</label>
+              <label for="note">Dietary restrictions or anything we should know (optional)</label>
               <textarea id="note" name="note" rows="2"></textarea>
             </div>
             <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
           </div>
           <div class="form-foot">
-            <button class="btn" type="submit">Send my address</button>
-            <p class="form-note">We'll only use this to mail your card and share wedding updates.</p>
+            <button class="btn" type="submit">Send RSVP</button>
+            <p class="form-note">We'll use your address to mail your save-the-date and invitation.</p>
           </div>
         </form>
         <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
