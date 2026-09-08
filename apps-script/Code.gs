@@ -10,9 +10,9 @@
  *   2. sendWeeklyDigest() Every Friday at 5 PM Central: emails Noah & Bethany the
  *                        week's new RSVPs plus a ready-to-upload CSV of every accepted
  *                        guest's mailing address that still needs a save-the-date card.
- *                        It also refreshes the "Mailing List" tab in the Sheet, which you
- *                        can download (File → Download → CSV) or copy into Minted, Zola,
- *                        Shutterfly, etc. when you order the cards.
+ *                        The CSV has Postable's required headers, so it imports straight into
+ *                        Postable (Contacts → Import spreadsheet), which prints, addresses, stamps
+ *                        and mails the cards. The "Mailing List" tab in the Sheet is refreshed too.
  *
  * ---------------------------------------------------------------
  * PART A — Connect the form (already done)
@@ -212,9 +212,9 @@ function digest_(advanceMarker) {
     (fresh.length ? table_(fresh) : "<p><em>No new RSVPs this week.</em></p>") +
     "<h2 style=\"font-weight:normal;margin:22px 0 6px\">Save-the-date cards still to mail: " + pending.length + "</h2>" +
     "<p style=\"margin:0 0 10px\">The attached CSV has every accepted guest's address that hasn't been marked <code>cardSent</code> yet — " +
-    "upload it straight to Minted / Zola / Shutterfly or print labels from it. The same list lives in the " +
+    "import it into Postable (Contacts → Import spreadsheet → pick the saved card → send). The same list lives in the " +
     "<a href=\"" + url + "\">“Mailing List” tab of the Sheet</a>.</p>" +
-    "<p style=\"color:#7A736A;font-size:13px\">Once a card is in the mail, type a date in that guest's cardSent column on the RSVPs tab and they drop off this list. " +
+    "<p style=\"color:#7A736A;font-size:13px\">Once you've sent a batch through Postable, type a date in each guest's cardSent column on the RSVPs tab so they drop off next week's list. " +
     "Declines are never included.</p></div>";
 
   var text = "This week's RSVPs (since " + sinceText + "): " + freshYes.length + " accepted, " + freshNo.length + " declined. Overall: " + totals_(rows) + ".\n\n" +

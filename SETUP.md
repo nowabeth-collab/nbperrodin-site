@@ -29,16 +29,18 @@ The same files also live on Noah's Mac in `Desktop/Noah Bethany Website/nbperrod
 
 ## Every Friday at 5 PM Central
 
-The script emails you **"Save-the-date list: N new RSVPs this week · N addresses to mail"** with:
+The script emails you **"Save-the-date list: N new RSVPs this week · N addresses to mail"** with the week's new RSVPs in a table and `save-the-date-mailing-list.csv` — every accepted guest's address that hasn't been marked as mailed. The `Mailing List` tab in the Sheet is refreshed at the same time. Nothing is sent on a week with no new RSVPs and nothing left to mail.
 
-- the week's new RSVPs in a table, and
-- `save-the-date-mailing-list.csv` — every accepted guest's address that hasn't been marked as mailed. Upload it to Minted / Zola / Shutterfly's address book, or print labels from it.
+## Mailing through Postable (the 5-minute Friday routine)
 
-The `Mailing List` tab in the Sheet is refreshed at the same time (File → Download → CSV works too).
+Postable (account: nowabeth@gmail.com) prints, addresses, stamps and mails the cards. Both designs are saved there as projects — **"Upload Your Own Card"** (the 5x7 invitation, kraft envelope, calligraphy addressing, no Postable logo) and the **4x6 save-the-date postcard**.
 
-**When you've mailed someone's card**, type a date in their `cardSent` cell on the `RSVPs` tab. They drop off the CSV and the tab. Declines are never included.
+1. Save the CSV from the Friday email.
+2. Postable → **Contacts → Import spreadsheet** → upload it, name the group by date (e.g. "Batch Sep 19"). The CSV already has Postable's required headers.
+3. **Projects** → open the card → **Recipients** → select that group → Save and checkout → pay. They mail within 1–2 business days; USPS takes 2–6 more.
+4. Back in the Sheet, type today's date in each of those guests' **cardSent** cells so they drop off next week's list.
 
-Nothing is sent on a week with no new RSVPs and nothing left to mail.
+Pricing (2026): flat card $4.59 at 20+ (+$0.25 to hide their logo) + $0.82 stamp; postcard cheaper, stamp $0.65. Codes: `WELCOME` = 25% off the first order (save it for the big batch); seasonal codes appear in the site banner.
 
 Handy functions in the Apps Script editor (function dropdown → Run):
 
@@ -58,8 +60,7 @@ Visiting the web app URL (the `formEndpoint`) in a browser shows the current tot
 - `save-the-date-card-4x6.pdf` — print-ready, 2 pages (front, back), 6.25 × 4.25 in including 1/8 in bleed. Upload it to Vistaprint / Shutterfly / any print shop as a "4x6 postcard, full bleed", or use it as the artwork on Minted's "upload your own design" cards.
 - `preview-front.jpg`, `preview-back.jpg` — quick look.
 - `front.html`, `back.html` — the editable source. Change the text, open the file in a browser to check it, and ask Claude to re-export the PDF.
-
-The back has a stamp box and address lines, so cards can be hand-addressed or take a label printed from the mailing-list CSV.
+- `front-postable.html` / `postable-front-6x4.25-bleed.jpg` — the same front at Postable's postcard size (6 × 4.25 in). Postable prints the address and your message on the back, so `back.html` is only for printing elsewhere.
 
 ## The formal invitation
 
@@ -68,6 +69,7 @@ The back has a stamp box and address lines, so cards can be hand-addressed or ta
 - `invitation-5x7.pdf` — print-ready, 2 pages (front, back), 5.25 × 7.25 in including 1/8 in bleed. Order as a "5x7 flat card, full bleed, printed both sides" (Vistaprint, Shutterfly, Minted "upload your design", or a local print shop). A5/5x7 envelopes fit it.
 - `preview-front.jpg`, `preview-back.jpg` — quick look.
 - `front.html`, `back.html` — editable source. The RSVP-by date (October 17) and the details copy live in `back.html`; the QR code points to nbperrodin.com/rsvp (`assets/qr-rsvp.png`).
+- `postable-front-5x7-bleed.jpg`, `postable-back-5x7-bleed.jpg` (from `back-postable.html`) — the uploads used in the Postable project. Postable's back layout is a 5.25 × 6.4 in image with a white strip below, which is why the back has its own variant.
 
 Mail invitations 6–8 weeks before the wedding (early-to-mid October).
 
@@ -87,4 +89,4 @@ Edit `apps-script/Code.gs`, paste it into the Apps Script editor, save, then **D
 
 - Paste the Google Photos shared-album link into `assets/config.js` → `photoAlbumUrl` (Photos → Albums → the album → Share → Create link, with "Collaborate" on).
 - Wedding party photos: drop square-ish JPGs in `assets/photos/party/` and set each person's `photo` in `config.js`.
-- Order the save-the-dates as soon as the address list has filled in, then the invitations 6–8 weeks out (early-to-mid October). Both PDFs are ready.
+- Send the RSVP link to guests, then run the Friday routine above: save-the-dates as addresses arrive, invitations by late September so they land before the October 17 reply-by date.

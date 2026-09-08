@@ -1,0 +1,43 @@
+<!-- Save-the-date postcard — FRONT, Postable version.
+     Postable postcards are 6 x 4.25in; they want 6.25in x 4.5in uploads (1/8in bleed). Same design as front.html, a touch taller.
+     Keep anything important at least 1/4in from the edge of this file.
+     Open this file in a browser to preview; save-the-date-card-4x6.pdf is the print-ready export. -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Save the date — front</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400&display=swap">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  @page { size: 6.25in 4.5in; margin: 0; }
+  html, body { margin: 0; }
+  body { width: 6.25in; height: 4.5in; background: #F4F0E9; font-family: 'Jost', Helvetica, Arial, sans-serif; color: #4E5B44; overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .card { position: relative; width: 6.25in; height: 4.5in; display: flex; }
+  .photo { width: 2.85in; height: 100%; background: url('../assets/photos/card-front.jpg') center 35% / cover no-repeat; }
+  .text { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0.25in 0.3in 0.3in 0.25in; }
+  .arch { width: 2.55in; margin: 0 auto 0.02in; display: block; }
+  .eyebrow { font-size: 7.5pt; letter-spacing: 0.26em; text-transform: uppercase; color: #B98E8C; margin: 0 0 6pt; }
+  .names { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 25pt; font-weight: 500; line-height: 1.02; }
+  .names em { font-style: italic; color: #B98E8C; font-size: 19pt; }
+  .rule { width: 0.4in; height: 1px; background: #B98E8C; margin: 8pt auto; }
+  .date { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 16pt; letter-spacing: 0.1em; }
+  .place { font-size: 7.5pt; letter-spacing: 0.2em; text-transform: uppercase; color: #7A736A; margin-top: 5pt; }
+  .foot { font-size: 7pt; letter-spacing: 0.12em; text-transform: uppercase; color: #7A736A; margin-top: 12pt; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="photo"></div>
+  <div class="text">
+    <img class="arch" src="../assets/florals/arch.png" alt="">
+    <div class="eyebrow">Save the date</div>
+    <div class="names">Noah <em>&amp;</em> Bethany</div>
+    <div class="rule"></div>
+    <div class="date">11 &middot; 28 &middot; 2026</div>
+    <div class="place">Camp Hosea &middot; Anderson, Texas</div>
+    <div class="foot">Formal invitation to follow</div>
+  </div>
+</div>
+</body>
+</html>
