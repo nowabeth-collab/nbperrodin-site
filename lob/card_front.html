@@ -1,33 +1,36 @@
-<!-- Lob 4x6 postcard FRONT. Trim 6" x 4"; template is 6.25" x 4.25" incl. 1/8" bleed.
-     Photo is hosted on the live site — change the URL if you host it elsewhere.
-     Preview locally by opening this file in a browser (it's fixed-size). -->
+<!-- Lob 4x6 postcard FRONT — 6.25in x 4.25in including 1/8in bleed (trim 6x4).
+     Images are pulled from the live site. Open this file in a browser to preview. -->
 <html>
 <head>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Jost:wght@300;400&display=swap">
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400&display=swap">
 <style>
   *, *::before, *::after { box-sizing: border-box; }
-  body { width: 6.25in; height: 4.25in; margin: 0; background: #F7F4EE; font-family: 'Jost', Helvetica, Arial, sans-serif; color: #2F4A3B; }
-  .card { width: 6.25in; height: 4.25in; display: flex; }
-  .photo { width: 2.95in; height: 100%; background: url('https://nbperrodin.com/assets/photos/card-front.jpg') center / cover no-repeat; }
-  .text { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0.35in 0.3in; }
-  .eyebrow { font-size: 8pt; letter-spacing: 0.25em; text-transform: uppercase; color: #B9975B; margin-bottom: 10pt; }
-  .names { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 27pt; font-weight: 500; line-height: 1.05; }
-  .names em { color: #B9975B; font-style: italic; }
-  .rule { width: 0.4in; height: 1px; background: #B9975B; margin: 10pt auto; }
-  .date { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 17pt; letter-spacing: 0.08em; }
-  .place { font-size: 8pt; letter-spacing: 0.2em; text-transform: uppercase; color: #6B655C; margin-top: 6pt; }
-  .foot { font-size: 7.5pt; letter-spacing: 0.1em; text-transform: uppercase; color: #6B655C; margin-top: 18pt; }
+  body { width: 6.25in; height: 4.25in; margin: 0; background: #F4F0E9; font-family: 'Jost', Helvetica, Arial, sans-serif; color: #4E5B44; overflow: hidden; }
+  .card { position: relative; width: 6.25in; height: 4.25in; display: flex; }
+  .photo { width: 2.85in; height: 100%; background: url('https://nbperrodin.com/assets/photos/card-front.jpg') center 35% / cover no-repeat; }
+  .text { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0.25in 0.3in 0.3in 0.25in; }
+  .arch { width: 2.55in; margin: 0 auto 0.02in; display: block; }
+  .eyebrow { font-size: 7.5pt; letter-spacing: 0.26em; text-transform: uppercase; color: #B98E8C; margin: 0 0 6pt; }
+  .names { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 25pt; font-weight: 500; line-height: 1.02; }
+  .names em { font-style: italic; color: #B98E8C; font-size: 19pt; }
+  .rule { width: 0.4in; height: 1px; background: #B98E8C; margin: 8pt auto; }
+  .date { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 16pt; letter-spacing: 0.1em; }
+  .place { font-size: 7.5pt; letter-spacing: 0.2em; text-transform: uppercase; color: #7A736A; margin-top: 5pt; }
+  .foot { font-size: 7pt; letter-spacing: 0.12em; text-transform: uppercase; color: #7A736A; margin-top: 12pt; }
+  .swag { position: absolute; left: -0.55in; bottom: 0.18in; width: 1.35in; opacity: 0.95; }
 </style>
 </head>
 <body>
 <div class="card">
   <div class="photo"></div>
   <div class="text">
+    <img class="arch" src="https://nbperrodin.com/assets/florals/arch.png" alt="">
     <div class="eyebrow">Save the date</div>
-    <div class="names">Noah<br><em>&amp;</em> Bethany</div>
+    <div class="names">Noah <em>&amp;</em> Bethany</div>
     <div class="rule"></div>
-    <div class="date">11 · 28 · 2026</div>
-    <div class="place">Anderson, Texas</div>
+    <div class="date">11 &middot; 28 &middot; 2026</div>
+    <div class="place">Camp Hosea &middot; Anderson, Texas</div>
     <div class="foot">Formal invitation to follow</div>
   </div>
 </div>

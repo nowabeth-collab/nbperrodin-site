@@ -1,29 +1,33 @@
-<!-- Lob 4x6 postcard BACK. Lob prints the address + postage in the RIGHT portion
-     automatically; keep the right ~3.2" x 2.4" (bottom-right) free of artwork.
-     Our design keeps everything in the left 2.6" so nothing collides.
-     {{first_name}} is filled per-card from merge_variables. -->
+<!-- Lob 4x6 postcard BACK. Lob prints the address block + postage on the right side;
+     keep the right ~3.2in x 2.4in (bottom-right) free. Everything here stays in the left 2.7in.
+     {{first_name}} is filled per card. -->
 <html>
 <head>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Jost:wght@300;400&display=swap">
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400&display=swap">
 <style>
   *, *::before, *::after { box-sizing: border-box; }
-  body { width: 6.25in; height: 4.25in; margin: 0; background: #FFFFFF; font-family: 'Jost', Helvetica, Arial, sans-serif; color: #2B2A28; }
-  .left { position: absolute; left: 0.3in; top: 0.3in; width: 2.6in; height: 3.65in; border-right: 1px solid #D9D2C4; padding-right: 0.2in; }
-  h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 16pt; font-weight: 500; color: #2F4A3B; margin: 0 0 6pt; }
-  p { font-size: 8.5pt; line-height: 1.45; font-weight: 300; margin: 0 0 7pt; }
-  .url { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 12pt; color: #2F4A3B; margin-top: 10pt; }
-  .small { font-size: 7pt; letter-spacing: 0.12em; text-transform: uppercase; color: #B9975B; }
-  .qr { position: absolute; left: 0.3in; bottom: 0.3in; width: 0.8in; height: 0.8in; }
+  body { width: 6.25in; height: 4.25in; margin: 0; background: #FFFFFF; font-family: 'Jost', Helvetica, Arial, sans-serif; color: #3A3833; overflow: hidden; }
+  .left { position: absolute; left: 0.32in; top: 0.3in; width: 2.7in; height: 3.65in; border-right: 1px solid #D8CFC2; padding-right: 0.22in; }
+  .garland { width: 1.9in; display: block; margin: 0 0 6pt -0.05in; }
+  h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 15pt; font-weight: 500; color: #4E5B44; margin: 0 0 5pt; line-height: 1.15; }
+  p { font-size: 8pt; line-height: 1.45; font-weight: 300; margin: 0 0 6pt; }
+  .url { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 12pt; color: #4E5B44; margin-top: 6pt; }
+  .small { font-size: 6.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: #B98E8C; margin-top: 2pt; }
+  .qr { position: absolute; left: 0.32in; bottom: 0.3in; width: 0.78in; height: 0.78in; }
+  .qrlbl { position: absolute; left: 1.2in; bottom: 0.42in; width: 1.7in; font-size: 6.5pt; color: #7A736A; line-height: 1.4; }
 </style>
 </head>
 <body>
   <div class="left">
+    <img class="garland" src="https://nbperrodin.com/assets/florals/garland.png" alt="">
     <h1>{{first_name}}, we hope you'll be there.</h1>
-    <p>We're getting married on Saturday, November 28, 2026 at Camp Hosea in Anderson, Texas — the Saturday after Thanksgiving.</p>
-    <p>Details, the calendar invite, our registry and the story of how this all started are on our website.</p>
+    <p>We're getting married on Saturday, November 28, 2026 at Camp Hosea in Anderson, Texas &mdash; the Saturday after Thanksgiving.</p>
+    <p>Details, the calendar invite, our registry and the story of how it all started are on our website.</p>
     <div class="url">nbperrodin.com</div>
     <div class="small">Formal invitation to follow</div>
-    <img class="qr" src="https://nbperrodin.com/assets/qr-site.png" alt="">
   </div>
+  <img class="qr" src="https://nbperrodin.com/assets/qr-site.png" alt="">
+  <div class="qrlbl">Scan for the website, calendar invite and registry</div>
 </body>
 </html>
