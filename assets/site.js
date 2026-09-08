@@ -61,9 +61,7 @@
     img.className = "hero-main";
     img.onload = () => {
       heroPhoto.innerHTML = "";
-      // Soft, blurred copy of the same photo fills the width behind the centered portrait
-      const bg = new Image(); bg.src = S.heroImage; bg.alt = ""; bg.className = "hero-bg"; bg.setAttribute("aria-hidden", "true");
-      heroPhoto.appendChild(bg); heroPhoto.appendChild(img);
+      heroPhoto.appendChild(img);
     };
     img.src = S.heroImage;
   }
