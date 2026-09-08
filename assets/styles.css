@@ -279,3 +279,31 @@ input:focus, select:focus, textarea:focus { border-color: var(--pine); backgroun
 .scroll-cue-arrows i:nth-child(3) { animation-delay: 0.5s; }
 @keyframes cue { 0%, 100% { opacity: 0.25; transform: rotate(45deg) translate(0, 0); } 50% { opacity: 1; transform: rotate(45deg) translate(3px, 3px); } }
 .scroll-cue:hover .scroll-cue-text { color: var(--pine); }
+
+/* --- Save the Date: tighter top so the scroll cue sits above the fold --- */
+body[data-page="save-the-date.html"] .section.center:first-of-type { padding-top: 1.25rem; padding-bottom: 1.5rem; }
+body[data-page="save-the-date.html"] .page-head .head-arch { width: min(440px, 80vw); margin: -0.25rem auto 0; }
+body[data-page="save-the-date.html"] .page-head h1 { font-size: clamp(2.4rem, 5.5vw, 3.8rem); }
+body[data-page="save-the-date.html"] .page-head .eyebrow { margin-bottom: 0.4rem; }
+body[data-page="save-the-date.html"] .page-head .rule { margin: 0.9rem auto; }
+body[data-page="save-the-date.html"] .page-head .btn-row { margin-top: 1rem; }
+body[data-page="save-the-date.html"] .details { margin-top: 1.6rem; gap: 1.25rem 2rem; }
+body[data-page="save-the-date.html"] .scroll-cue { margin-top: 1.5rem; }
+@media (max-width: 700px) {
+  body[data-page="save-the-date.html"] .page-head .head-arch { width: min(320px, 70vw); }
+  body[data-page="save-the-date.html"] .details { grid-template-columns: 1fr 1fr; gap: 1rem; text-align: center; }
+  body[data-page="save-the-date.html"] .details h3 { font-size: 1.05rem; }
+  body[data-page="save-the-date.html"] .details p { font-size: 0.9rem; }
+}
+@media (max-width: 700px) {
+  body[data-page="save-the-date.html"] .page-head .head-arch { width: min(270px, 62vw); }
+  body[data-page="save-the-date.html"] .page-head .hero-date { display: none; }
+  body[data-page="save-the-date.html"] .page-head > p:not(.eyebrow):not(.hero-place) { font-size: 0.95rem; line-height: 1.5; }
+  body[data-page="save-the-date.html"] .page-head .btn-row { margin-top: 0.75rem; gap: 0.5rem; }
+  body[data-page="save-the-date.html"] .page-head .btn { padding: 0.7rem 1.1rem; font-size: 0.78rem; }
+  body[data-page="save-the-date.html"] .details { margin-top: 1.1rem; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem; }
+  body[data-page="save-the-date.html"] .details h3 { font-size: 0.95rem; }
+  body[data-page="save-the-date.html"] .details p { font-size: 0.78rem; }
+  body[data-page="save-the-date.html"] .details .lbl { font-size: 0.62rem; margin-bottom: 0.2rem; }
+  body[data-page="save-the-date.html"] .scroll-cue { margin-top: 1.1rem; }
+}
