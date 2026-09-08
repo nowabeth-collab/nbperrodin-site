@@ -165,7 +165,7 @@ function confirmationHtml_(first, yes) {
     "<div style=\"width:44px;height:1px;background:" + mauve + ";margin:16px auto 0;\"></div>" +
     "</td></tr>" +
     // photo
-    "<tr><td style=\"padding:24px 32px 0;\"><img src=\"" + img + "photo.jpg\" width=\"536\" alt=\"Noah and Bethany\" style=\"display:block;width:100%;height:auto;border:0;border-radius:12px;\"></td></tr>" +
+    "<tr><td align=\"center\" style=\"padding:24px 32px 0;\"><img src=\"" + img + "photo-walk.jpg\" width=\"320\" height=\"480\" alt=\"Noah and Bethany\" style=\"display:block;width:320px;max-width:100%;height:auto;border:0;border-radius:12px;margin:0 auto;\"></td></tr>" +
     // body
     "<tr><td style=\"padding:26px 32px 8px;\">" + body + "</td></tr>" +
     // sign-off
