@@ -90,14 +90,15 @@
               <input id="lastName" name="lastName" autocomplete="family-name" required>
             </div>
             <div class="attending-only">
-              <label for="guestCount">Number attending (including you)</label>
+              <label for="guestCount">How many are coming, including you?</label>
               <select id="guestCount" name="guestCount">
                 <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
               </select>
             </div>
-            <div class="attending-only">
-              <label for="guestNames">Names of everyone attending</label>
-              <input id="guestNames" name="guestNames" placeholder="e.g. Sarah Smith, Ben Smith">
+            <div class="attending-only party-only" hidden>
+              <label for="guestNames">Who's coming with you?</label>
+              <input id="guestNames" name="guestNames" placeholder="e.g. Sarah Smith, Ben Smith" aria-describedby="guestNames-hint">
+              <p class="field-hint" id="guestNames-hint">First and last names of the other guests in your party — you don't need to list yourself.</p>
             </div>
             <div>
               <label for="email">Email</label>

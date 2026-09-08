@@ -122,6 +122,7 @@
       form.querySelectorAll("[aria-invalid]").forEach((f) => f.removeAttribute("aria-invalid"));
       const data = Object.fromEntries(new FormData(form).entries());
       if (data.attending === "no") { data.guestCount = "0"; data.guestNames = ""; }
+      if (Number(data.guestCount) <= 1) data.guestNames = "";
       delete data.website;
       data.submittedAt = new Date().toISOString();
       data.source = location.href;
@@ -168,13 +169,16 @@
     setTimeout(() => cal.scrollIntoView({ behavior: "smooth", block: "center" }), 300);
   }
 
-  /* ---------- RSVP: hide guest fields when declining ---------- */
-  document.querySelectorAll('#std-form input[name="attending"]').forEach((r) => {
-    r.addEventListener("change", () => {
-      const yes = r.value === "yes" && r.checked;
-      document.querySelectorAll("#std-form .attending-only").forEach((el) => { el.hidden = !yes; });
+  /* ---------- RSVP: hide guest fields when declining, extra-names when coming alone ---------- */
+  const syncPartyFields = () => {
+    const declined = !!document.querySelector('#std-form input[name="attending"][value="no"]:checked');
+    const count = document.getElementById("guestCount");
+    const plural = !!count && Number(count.value) > 1;
+    document.querySelectorAll("#std-form .attending-only").forEach((el) => {
+      el.hidden = declined || (el.classList.contains("party-only") && !plural);
     });
-  });
+  };
+  document.querySelectorAll('#std-form input[name="attending"], #std-form #guestCount').forEach((el) => el.addEventListener("change", syncPartyFields));
 
   /* ---------- Venue page ---------- */
   const venueRoot = document.getElementById("venue");

@@ -144,6 +144,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--pine); backgroun
 [aria-invalid="true"] { border-color: #B5514A; background: #FBF1EF; }
 .form-foot { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
 .form-note { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
+.field-hint { font-size: 0.8rem; color: var(--ink-soft); margin: 0.35rem 0 0; }
 .form-status { margin-top: 1rem; padding: 0.9rem 1rem; border-radius: var(--radius); font-size: 0.95rem; display: none; }
 .form-status.ok { display: block; background: color-mix(in srgb, var(--pine) 10%, #fff); color: var(--pine); border: 1px solid color-mix(in srgb, var(--pine) 30%, transparent); }
 .form-status.err { display: block; background: #FBEDEA; color: #8A2E22; border: 1px solid #E9C2BA; }
