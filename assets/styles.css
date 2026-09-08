@@ -201,14 +201,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--pine); backgroun
 .hero-banner { position: relative; height: clamp(360px, 62vh, 640px); overflow: visible; }
 .hero-banner .hero-photo { position: absolute; inset: 0; overflow: hidden; }
 .hero-banner .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; }
-.hero-floral-tl { position: absolute; z-index: 3; width: clamp(220px, 30vw, 460px); left: -0.5rem; top: -0.5rem; }
-.hero-floral-br { position: absolute; z-index: 3; width: clamp(220px, 30vw, 460px); right: -0.5rem; bottom: -0.5rem; }
-.hero-text { display: block; text-align: center; padding: clamp(2.5rem, 6vw, 4rem) 1.25rem clamp(2rem, 5vw, 3.5rem); position: relative; z-index: 2; }
+/* Garland swag straddling the bottom edge of the photo */
+.hero-swag { position: absolute; z-index: 3; width: min(720px, 86vw); left: 50%; bottom: 0; transform: translate(-50%, 50%); filter: drop-shadow(0 6px 14px rgba(58,56,51,0.18)); }
+.hero-text { display: block; text-align: center; padding: clamp(4.5rem, 9vw, 7rem) 1.25rem clamp(2rem, 5vw, 3.5rem); position: relative; z-index: 2; }
 .hero-text p { margin-inline: auto; }
 .hero-text .btn-row { justify-content: center; }
 .hero-garland { width: min(460px, 78vw); margin: 0.25rem auto 0.75rem; }
 @media (max-width: 700px) {
-  .hero-floral-tl, .hero-floral-br { width: 190px; }
+  .hero-swag { width: 92vw; }
+  .hero-text { padding-top: 3.5rem; }
 }
 
 /* Page headings crowned by the arched garland */
