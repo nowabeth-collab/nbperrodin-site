@@ -52,16 +52,20 @@ window.SITE = {
   // Photo files go in assets/photos/party/ (square crops look best).
   // Leave photo as "" to show initials instead.
   bridesmaids: [
-    { name: "Maid of Honor", role: "Maid of Honor", photo: "", note: "How she knows Bethany…" },
-    { name: "Bridesmaid 1",  role: "Bridesmaid",    photo: "", note: "" },
-    { name: "Bridesmaid 2",  role: "Bridesmaid",    photo: "", note: "" },
-    { name: "Bridesmaid 3",  role: "Bridesmaid",    photo: "", note: "" },
+    { name: "Rachel Farquhar",  role: "Maid of Honor", photo: "", note: "" },
+    { name: "Echo Dengering",   role: "Bridesmaid",    photo: "", note: "" },
+    { name: "Thalia Vasquez",   role: "Bridesmaid",    photo: "", note: "" },
+    { name: "Rachel Fry",       role: "Bridesmaid",    photo: "", note: "" },
+    { name: "Daniela Ovalle",   role: "Bridesmaid",    photo: "", note: "" },
+    { name: "Kierna Chalmers",  role: "Bridesmaid",    photo: "", note: "" },
   ],
   groomsmen: [
-    { name: "Best Man",    role: "Best Man",  photo: "", note: "How he knows Noah…" },
-    { name: "Groomsman 1", role: "Groomsman", photo: "", note: "" },
-    { name: "Groomsman 2", role: "Groomsman", photo: "", note: "" },
-    { name: "Groomsman 3", role: "Groomsman", photo: "", note: "" },
+    { name: "Michael Hildebrandt", role: "Best Man",  photo: "", note: "" },
+    { name: "Joshua Fry",          role: "Groomsman", photo: "", note: "" },
+    { name: "Cayden First",        role: "Groomsman", photo: "", note: "" },
+    { name: "Connor Olivares",     role: "Groomsman", photo: "", note: "" },
+    { name: "Ethan Farquhar",      role: "Groomsman", photo: "", note: "" },
+    { name: "Michael Perrodin",    role: "Groomsman", photo: "", note: "" },
   ],
 
   // --- Gallery (proposal + engagement photos) -----------------

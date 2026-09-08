@@ -192,38 +192,49 @@ input:focus, select:focus, textarea:focus { border-color: var(--pine); backgroun
 .site-footer .names { font-family: var(--display); font-size: 1.5rem; color: var(--pine); margin-bottom: 0.4rem; }
 .site-footer .hashtag { letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.75rem; color: var(--gold); }
 
-/* --- Florals (watercolor PNGs) ------------------------------ */
+/* --- Florals (watercolor artwork) --------------------------- */
 [data-floral] { pointer-events: none; }
 .floral-img { display: block; width: 100%; height: auto; }
 
-/* Hero banner: photo across the top, roses spilling over its corners */
-.hero { position: relative; display: block; min-height: 0; }
-.hero-text { display: block; padding-bottom: clamp(2.5rem, 6vw, 4rem); }
-.hero-text p { margin-inline: auto; }
+/* Welcome hero: photo banner with corner clusters, garland under the names */
+.hero { position: relative; display: block; }
 .hero-banner { position: relative; height: clamp(360px, 62vh, 640px); overflow: visible; }
 .hero-banner .hero-photo { position: absolute; inset: 0; overflow: hidden; }
-.hero-banner .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 38% 12%; }
-.hero-floral-tl { position: absolute; z-index: 3; width: clamp(240px, 30vw, 460px); left: 0; top: 0; }
-.hero-floral-br { position: absolute; z-index: 3; width: clamp(220px, 26vw, 400px); right: 0; bottom: 0; }
-.hero-floral-br .floral-img { display: block; margin-bottom: -6px; }
-.hero-text { text-align: center; padding: clamp(2.5rem, 6vw, 4.5rem) 1.25rem 0; position: relative; z-index: 2; }
+.hero-banner .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; }
+.hero-floral-tl { position: absolute; z-index: 3; width: clamp(220px, 30vw, 460px); left: -0.5rem; top: -0.5rem; }
+.hero-floral-br { position: absolute; z-index: 3; width: clamp(220px, 30vw, 460px); right: -0.5rem; bottom: -0.5rem; }
+.hero-text { display: block; text-align: center; padding: clamp(2.5rem, 6vw, 4rem) 1.25rem clamp(2rem, 5vw, 3.5rem); position: relative; z-index: 2; }
+.hero-text p { margin-inline: auto; }
 .hero-text .btn-row { justify-content: center; }
+.hero-garland { width: min(460px, 78vw); margin: 0.25rem auto 0.75rem; }
 @media (max-width: 700px) {
-  .hero-floral-tl { width: 190px; left: 0; top: 0; }
-  .hero-floral-br { width: 190px; right: 0; bottom: 0; }
+  .hero-floral-tl, .hero-floral-br { width: 190px; }
 }
 
-/* Corner roses on cards and bands */
+/* Page headings crowned by the arched garland */
+.page-head { position: relative; }
+.page-head .head-arch { width: min(640px, 92vw); margin: -0.5rem auto 0.5rem; }
+.page-head > *:not(.head-arch) { position: relative; z-index: 1; }
+
+/* Address form band: tall bouquet at the side on wide screens */
+.section.band { position: relative; overflow: hidden; }
+.band .wrap { position: relative; z-index: 1; }
+.band-bouquet { position: absolute; z-index: 0; width: clamp(150px, 16vw, 240px); left: max(0.5rem, calc(50% - 560px - 20px)); top: 50%; transform: translateY(-46%); opacity: 0.95; }
+.band-bouquet.right { left: auto; right: max(0.5rem, calc(50% - 560px - 20px)); transform: translateY(-46%) scaleX(-1); }
+@media (max-width: 1120px) { .band-bouquet { display: none; } }
+.band-floral.br { position: absolute; z-index: 0; width: clamp(200px, 26vw, 360px); right: -0.5rem; bottom: -0.5rem; opacity: 0.9; }
+.band-floral.tl { position: absolute; z-index: 0; width: clamp(200px, 26vw, 360px); left: -0.5rem; top: -0.5rem; opacity: 0.9; }
+
+/* Corner clusters on cards */
 .has-corner { position: relative; }
 .has-corner [data-floral] { position: absolute; z-index: 1; }
-.has-corner .corner-br { width: 200px; right: -50px; bottom: -60px; }
-.has-corner .corner-tl { width: 190px; left: -50px; top: -44px; }
-.section.band { position: relative; overflow: hidden; }
-.band-floral { position: absolute; z-index: 0; opacity: 0.9; }
-.band-floral.tl { width: clamp(180px, 22vw, 320px); left: -2rem; top: -1rem; }
-.band-floral.br { width: clamp(180px, 22vw, 320px); right: -2rem; bottom: -3rem; }
-.band .wrap { position: relative; z-index: 1; }
-@media (max-width: 600px) { .has-corner .corner-br { width: 130px; right: -30px; bottom: -36px; } .has-corner .corner-tl { width: 120px; left: -30px; top: -28px; } }
-.page-head { position: relative; }
-.page-head .head-floral { position: absolute; width: clamp(160px, 20vw, 300px); right: -2rem; top: -3rem; z-index: 0; opacity: 0.95; }
-.page-head > *:not(.head-floral) { position: relative; z-index: 1; }
+.has-corner .corner-br { width: 210px; right: -40px; bottom: -44px; }
+.has-corner .corner-tl { width: 200px; left: -40px; top: -40px; }
+@media (max-width: 600px) { .has-corner .corner-br { width: 140px; right: -24px; bottom: -28px; } .has-corner .corner-tl { width: 130px; left: -22px; top: -24px; } }
+
+/* Photo-share card framed by the wreath */
+.share-wreath { position: relative; width: min(560px, 92vw); margin: 1.5rem auto 0; aspect-ratio: 1; display: grid; place-items: center; }
+.share-wreath [data-floral] { position: absolute; inset: 0; }
+.share-wreath .share-inner { position: relative; z-index: 1; width: 62%; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.9rem; }
+.share-wreath .share-inner .big { font-family: var(--display); font-size: clamp(1.4rem, 3.5vw, 2rem); color: var(--pine); line-height: 1.1; }
+.share-wreath .share-inner .btn { font-size: 0.78rem; padding: 0.75rem 1.2rem; }
