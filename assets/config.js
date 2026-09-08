@@ -81,7 +81,7 @@ window.SITE = {
     // Drop venue photos in assets/photos/venue/ and list them here (first one is the big one).
     // A drone shot of the property makes the best lead image.
     photos: [
-      // { src: "assets/photos/venue/drone.jpg", caption: "Camp Hosea from above" },
+      { src: "assets/photos/venue/chapel.jpg", caption: "The chapel and the glass reception hall beside it" },
     ],
     // Embedded YouTube video (just the ID from the URL after v=). Leave "" for none.
     youtubeId: "F2jA3WVG8Y4",
