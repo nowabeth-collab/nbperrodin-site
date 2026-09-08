@@ -11,8 +11,8 @@
  * ---------------------------------------------------------------
  * PART A — Connect the form (5 minutes)
  * ---------------------------------------------------------------
- *  1. Create a new Google Sheet (sheets.new). Name it "Wedding RSVPs".
- *  2. Extensions → Apps Script. Delete the sample code, paste this whole file, save.
+ *  1. The Google Sheet "Wedding RSVPs" already exists (SHEET_ID below).
+ *  2. This code lives in a standalone Apps Script project (script.google.com).
  *  3. Left sidebar → Project Settings (gear) → Time zone: "(GMT-06:00) Central Time".
  *  4. Back in the editor: pick "setup" in the function dropdown → Run. Authorize when
  *     asked (Advanced → Go to project → Allow). This creates the header row.
@@ -44,6 +44,7 @@
  *  If you ever change this code: Deploy → Manage deployments → pencil → New version → Deploy.
  */
 
+var SHEET_ID = "1zZr3qCmm7XdjP0VpEJq-rjNCkj0rogKU8Je23eU5yLU"; // the "Wedding RSVPs" Google Sheet
 var SHEET_NAME = "RSVPs";
 var NOTIFY_EMAIL = "noahvideographer@gmail.com"; // set to "" to disable per-RSVP emails
 var SITE = "https://nbperrodin.com";
@@ -84,7 +85,7 @@ function doPost(e) {
           "Email: " + data.email + "\nPhone: " + data.phone +
           (data.note ? "\n\nNote: " + data.note : "") +
           "\n\nTotals so far: " + totals_() +
-          "\nSheet: " + SpreadsheetApp.getActiveSpreadsheet().getUrl()
+          "\nSheet: " + SpreadsheetApp.openById(SHEET_ID).getUrl()
       });
     }
     return json_({ ok: true });
@@ -175,7 +176,7 @@ function mailPendingCards() {
     "Mailed (" + sent.length + "):\n" + (sent.join("\n") || "none") + "\n\n" +
     "Skipped (" + skipped.length + "):\n" + (skipped.join("\n") || "none") + "\n\n" +
     "Problems (" + failed.length + "):\n" + (failed.join("\n") || "none") + "\n\n" +
-    "Sheet: " + SpreadsheetApp.getActiveSpreadsheet().getUrl();
+    "Sheet: " + SpreadsheetApp.openById(SHEET_ID).getUrl();
   if (NOTIFY_EMAIL) {
     MailApp.sendEmail({ to: NOTIFY_EMAIL, subject: (live ? "Save-the-dates mailed: " : "Save-the-date TEST run: ") + sent.length + " cards", body: summary });
   }
@@ -227,7 +228,7 @@ function lob_(key, path, payload) {
  * helpers
  * ================================================================ */
 function getSheet_() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = SpreadsheetApp.openById(SHEET_ID);
   var sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);

@@ -173,7 +173,7 @@ window.SITE = {
     { src: "assets/photos/gallery/photo-91.jpg", caption: "" },
     { src: "assets/photos/gallery/photo-92.jpg", caption: "" },
   ],
-  heroImage: "assets/photos/hero-pond.jpg",   // big welcome photo (landscape, ~2000px wide)
+  heroImage: "assets/photos/hero-pond-2.jpg",   // big welcome photo (landscape, ~2000px wide)
 
   // --- Our story (welcome page) -------------------------------
   story: [
