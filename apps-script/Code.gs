@@ -101,20 +101,83 @@ function sendGuestConfirmation_(d) {
   var yes = d.attending === "yes";
   var first = d.firstName || "there";
   var subject = yes ? "You're on the list — Noah & Bethany, November 28" : "Thank you, " + first + " — Noah & Bethany";
-  var html = yes
-    ? "<p>Hi " + esc_(first) + ",</p>" +
-      "<p>Thank you for your RSVP — we can't wait to celebrate with you!</p>" +
-      "<p><strong>Saturday, November 28, 2026</strong><br>Ceremony at 5:00 PM, reception to follow<br>" +
-      "Camp Hosea &middot; 17476 FM 3090, Anderson, TX 77830</p>" +
-      "<p>The calendar invite is attached, and everything else — directions, the registry, our story — is at " +
-      "<a href=\"" + SITE + "\">nbperrodin.com</a>. Keep an eye on your mailbox: a save-the-date card and a formal invitation will follow.</p>" +
-      "<p>With love,<br>Noah &amp; Bethany</p>"
-    : "<p>Hi " + esc_(first) + ",</p>" +
-      "<p>Thank you for letting us know. We're sorry you can't be there on November 28 — you'll be missed, and we're grateful you took the time to respond.</p>" +
-      "<p>With love,<br>Noah &amp; Bethany</p>";
-  var opts = { name: "Noah & Bethany", htmlBody: html, replyTo: NOTIFY_EMAIL };
+  var opts = { name: "Noah & Bethany", htmlBody: confirmationHtml_(first, yes), replyTo: NOTIFY_EMAIL };
   if (yes) opts.attachments = [Utilities.newBlob(ics_(), "text/calendar", "Noah-and-Bethany-Wedding.ics")];
-  MailApp.sendEmail(d.email, subject, yes ? "Thank you for your RSVP! Details at " + SITE : "Thank you for letting us know.", opts);
+  var plain = yes
+    ? "Thank you for your RSVP, " + first + " — we can't wait to celebrate with you!\n\nSaturday, November 28, 2026 · Ceremony at 5:00 PM, reception to follow\nCamp Hosea · 17476 FM 3090, Anderson, TX 77830\n\nCalendar invite attached. Everything else is at " + SITE + "\n\nWith love,\nNoah & Bethany"
+    : "Thank you for letting us know, " + first + ". We're sorry you can't be there on November 28 — you'll be missed.\n\nWith love,\nNoah & Bethany";
+  MailApp.sendEmail(d.email, subject, plain, opts);
+}
+
+/** Sends both versions of the confirmation email to NOTIFY_CC so you can see them. Run from the editor. */
+function sendTestConfirmation() {
+  sendGuestConfirmation_({ firstName: "Noah", attending: "yes", email: NOTIFY_CC });
+  sendGuestConfirmation_({ firstName: "Noah", attending: "no", email: NOTIFY_CC });
+}
+
+var CALENDAR_LINK = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+  "&text=" + encodeURIComponent("Noah & Bethany's Wedding") +
+  "&dates=20261128T230000Z%2F20261129T050000Z" +
+  "&details=" + encodeURIComponent("Ceremony at 5:00 PM, reception to follow. Details and updates at https://nbperrodin.com") +
+  "&location=" + encodeURIComponent("Camp Hosea, 17476 FM 3090, Anderson, TX 77830");
+var MAPS_LINK = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("Camp Hosea, 17476 FM 3090, Anderson, TX 77830");
+
+/** The branded HTML email (tables + inline styles so it looks right in Gmail, Apple Mail and Outlook). */
+function confirmationHtml_(first, yes) {
+  var img = SITE + "/assets/email/";
+  var serif = "font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;";
+  var sans = "font-family:Jost,'Helvetica Neue',Helvetica,Arial,sans-serif;";
+  var pine = "#4E5B44", mauve = "#B98E8C", ink = "#3A3833", soft = "#7A736A", paper = "#F4F0E9", line = "#E5DED3";
+  var button = function (href, label, filled) {
+    return "<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\" style=\"display:inline-table;margin:6px 6px\"><tr>" +
+      "<td align=\"center\" bgcolor=\"" + (filled ? pine : "#FFFFFF") + "\" style=\"border-radius:999px;border:1px solid " + pine + ";\">" +
+      "<a href=\"" + href + "\" style=\"display:inline-block;padding:12px 24px;" + sans + "font-size:14px;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;color:" + (filled ? "#FFFFFF" : pine) + ";\">" + label + "</a></td></tr></table>";
+  };
+  var body = yes
+    ? "<p style=\"margin:0 0 14px;" + sans + "font-size:16px;line-height:1.6;color:" + ink + ";\">Hi " + esc_(first) + ",</p>" +
+      "<p style=\"margin:0 0 22px;" + sans + "font-size:16px;line-height:1.6;color:" + ink + ";\">Thank you for your RSVP &mdash; we can&rsquo;t wait to celebrate with you! Here&rsquo;s everything you need for the day.</p>" +
+      // details card
+      "<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background:" + paper + ";border-radius:12px;\"><tr><td align=\"center\" style=\"padding:26px 24px 24px;\">" +
+      "<div style=\"" + sans + "font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:" + mauve + ";margin-bottom:8px;\">The day</div>" +
+      "<div style=\"" + serif + "font-size:26px;line-height:1.2;color:" + pine + ";\">Saturday, November 28, 2026</div>" +
+      "<div style=\"" + sans + "font-size:15px;line-height:1.6;color:" + ink + ";margin-top:6px;\">Ceremony at 5:00 PM &middot; Reception to follow</div>" +
+      "<div style=\"" + serif + "font-size:20px;color:" + pine + ";margin-top:16px;\">Camp Hosea</div>" +
+      "<div style=\"" + sans + "font-size:14px;line-height:1.6;color:" + soft + ";\"><a href=\"" + MAPS_LINK + "\" style=\"color:" + soft + ";text-decoration:underline;\">17476 FM 3090, Anderson, TX 77830</a><br>About 1 hr 20 min north of Houston</div>" +
+      "</td></tr></table>" +
+      "<div style=\"text-align:center;padding:22px 0 6px;\">" + button(CALENDAR_LINK, "Add to calendar", true) + button(SITE, "Visit nbperrodin.com", false) + "</div>" +
+      "<p style=\"margin:18px 0 0;" + sans + "font-size:15px;line-height:1.7;color:" + ink + ";\">" +
+      "<strong style=\"color:" + pine + ";\">What&rsquo;s next:</strong> a save-the-date card and your formal invitation will arrive in the mail. " +
+      "Directions, our registry and the story of how it all started are on the website, and if anything changes on your end, just reply to this email.</p>"
+    : "<p style=\"margin:0 0 14px;" + sans + "font-size:16px;line-height:1.6;color:" + ink + ";\">Hi " + esc_(first) + ",</p>" +
+      "<p style=\"margin:0 0 14px;" + sans + "font-size:16px;line-height:1.6;color:" + ink + ";\">Thank you for letting us know. We&rsquo;re sorry you can&rsquo;t be there on November 28 &mdash; you&rsquo;ll be missed, and we&rsquo;re grateful you took the time to respond.</p>" +
+      "<p style=\"margin:0;" + sans + "font-size:16px;line-height:1.6;color:" + ink + ";\">If plans change, just reply to this email and we&rsquo;ll save you a seat.</p>" +
+      "<div style=\"text-align:center;padding:22px 0 6px;\">" + button(SITE, "Visit nbperrodin.com", false) + "</div>";
+
+  return "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width\"><title>Noah &amp; Bethany</title></head>" +
+    "<body style=\"margin:0;padding:0;background:" + paper + ";\">" +
+    "<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background:" + paper + ";\"><tr><td align=\"center\" style=\"padding:28px 12px;\">" +
+    "<table role=\"presentation\" width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"max-width:600px;width:100%;background:#FFFFFF;border:1px solid " + line + ";border-radius:16px;overflow:hidden;\">" +
+    // header
+    "<tr><td align=\"center\" style=\"padding:30px 32px 0;\">" +
+    "<img src=\"" + img + "arch.png\" width=\"340\" alt=\"\" style=\"display:block;width:340px;max-width:80%;height:auto;border:0;\">" +
+    "<div style=\"" + sans + "font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:" + mauve + ";margin-top:14px;\">" + (yes ? "You&rsquo;re on the list" : "Thank you") + "</div>" +
+    "<div style=\"" + serif + "font-size:34px;line-height:1.15;color:" + pine + ";margin-top:8px;\">Noah <span style=\"color:" + mauve + ";font-style:italic;\">&amp;</span> Bethany</div>" +
+    "<div style=\"width:44px;height:1px;background:" + mauve + ";margin:16px auto 0;\"></div>" +
+    "</td></tr>" +
+    // photo
+    "<tr><td style=\"padding:24px 32px 0;\"><img src=\"" + img + "photo.jpg\" width=\"536\" alt=\"Noah and Bethany\" style=\"display:block;width:100%;height:auto;border:0;border-radius:12px;\"></td></tr>" +
+    // body
+    "<tr><td style=\"padding:26px 32px 8px;\">" + body + "</td></tr>" +
+    // sign-off
+    "<tr><td align=\"center\" style=\"padding:8px 32px 30px;\">" +
+    "<img src=\"" + img + "garland.png\" width=\"210\" alt=\"\" style=\"display:block;width:210px;max-width:60%;height:auto;border:0;margin:0 auto 10px;\">" +
+    "<div style=\"" + serif + "font-size:19px;font-style:italic;color:" + pine + ";\">With love,</div>" +
+    "<div style=\"" + serif + "font-size:22px;color:" + pine + ";\">Noah &amp; Bethany</div>" +
+    "<div style=\"" + sans + "font-size:12px;color:" + soft + ";margin-top:18px;\">November 28, 2026 &middot; Camp Hosea, Anderson, Texas &middot; <a href=\"" + SITE + "\" style=\"color:" + soft + ";\">nbperrodin.com</a></div>" +
+    "</td></tr>" +
+    "</table>" +
+    "<div style=\"" + sans + "font-size:11px;color:" + soft + ";margin-top:14px;\">You&rsquo;re receiving this because you replied at nbperrodin.com/rsvp.</div>" +
+    "</td></tr></table></body></html>";
 }
 
 /** The calendar invite, generated here so it never depends on the website being reachable. */
