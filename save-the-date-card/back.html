@@ -1,13 +1,18 @@
-<!-- Lob 4x6 postcard BACK. Lob prints the address block + postage on the right side;
-     keep the right ~3.2in x 2.4in (bottom-right) free. Everything here stays in the left 2.7in.
-     {{first_name}} is filled per card. -->
+<!-- Save-the-date postcard — BACK.
+     Same 6.25in x 4.25in (4x6 + bleed). Left: message + QR to the website.
+     Right: stamp box and address lines, left blank for hand-addressing or a label.
+     Open this file in a browser to preview; save-the-date-card-4x6.pdf is the print-ready export. -->
+<!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
+<title>Save the date — back</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400&display=swap">
 <style>
   *, *::before, *::after { box-sizing: border-box; }
-  body { width: 6.25in; height: 4.25in; margin: 0; background: #FFFFFF; font-family: 'Jost', Helvetica, Arial, sans-serif; color: #3A3833; overflow: hidden; }
+  @page { size: 6.25in 4.25in; margin: 0; }
+  html, body { margin: 0; }
+  body { width: 6.25in; height: 4.25in; background: #FFFFFF; font-family: 'Jost', Helvetica, Arial, sans-serif; color: #3A3833; overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .left { position: absolute; left: 0.32in; top: 0.3in; width: 2.7in; height: 3.65in; border-right: 1px solid #D8CFC2; padding-right: 0.22in; }
   .garland { width: 1.9in; display: block; margin: 0 0 6pt -0.05in; }
   h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 15pt; font-weight: 500; color: #4E5B44; margin: 0 0 5pt; line-height: 1.15; }
@@ -16,18 +21,24 @@
   .small { font-size: 6.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: #B98E8C; margin-top: 2pt; }
   .qr { position: absolute; left: 0.32in; bottom: 0.3in; width: 0.78in; height: 0.78in; }
   .qrlbl { position: absolute; left: 1.2in; bottom: 0.42in; width: 1.7in; font-size: 6.5pt; color: #7A736A; line-height: 1.4; }
+  .stamp { position: absolute; right: 0.4in; top: 0.4in; width: 0.85in; height: 1.0in; border: 1px dashed #D8CFC2; border-radius: 2px; }
+  .stamp span { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; font-size: 5.5pt; letter-spacing: 0.18em; text-transform: uppercase; color: #CBBDB4; }
+  .addr { position: absolute; left: 3.45in; right: 0.4in; bottom: 0.62in; }
+  .addr div { border-bottom: 1px solid #E5DED3; height: 0.32in; }
 </style>
 </head>
 <body>
   <div class="left">
-    <img class="garland" src="https://nbperrodin.com/assets/florals/garland.png" alt="">
-    <h1>{{first_name}}, we hope you'll be there.</h1>
+    <img class="garland" src="../assets/florals/garland.png" alt="">
+    <h1>We hope you'll be there.</h1>
     <p>We're getting married on Saturday, November 28, 2026 at Camp Hosea in Anderson, Texas &mdash; the Saturday after Thanksgiving.</p>
     <p>Details, the calendar invite, our registry and the story of how it all started are on our website.</p>
     <div class="url">nbperrodin.com</div>
     <div class="small">Formal invitation to follow</div>
   </div>
-  <img class="qr" src="https://nbperrodin.com/assets/qr-site.png" alt="">
+  <img class="qr" src="../assets/qr-site.png" alt="">
   <div class="qrlbl">Scan for the website, calendar invite and registry</div>
+  <div class="stamp"><span>Stamp</span></div>
+  <div class="addr"><div></div><div></div><div></div><div></div></div>
 </body>
 </html>

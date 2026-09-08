@@ -1,87 +1,80 @@
-# nbperrodin.com — Setup Guide
+# nbperrodin.com — How it all fits together
 
-Everything below is one-time setup. Total time: about 45 minutes, most of it waiting on DNS.
+Everything is live. This is the map for when you want to change something.
 
-## What's in this folder
+## Where things run
 
-| Path | What it is |
+| Piece | Where | Account |
+|---|---|---|
+| The website | GitHub Pages, from the `nowabeth-collab/nbperrodin-site` repo (branch `main`) | GitHub user **nowabeth-collab** |
+| Domain | GoDaddy DNS → GitHub Pages (`A` records + `www` CNAME) | GoDaddy |
+| RSVPs | Google Sheet **"Wedding RSVPs"** (tabs: `RSVPs`, `Mailing List`) | **nowabeth@gmail.com** |
+| Form backend + emails | Apps Script project **"Wedding RSVP + Save the Dates"** (`apps-script/Code.gs`) | nowabeth@gmail.com |
+| Guest photo album | Google Photos shared album (link goes in `assets/config.js` → `photoAlbumUrl`) | nowabeth@gmail.com |
+
+The same files also live on Noah's Mac in `Desktop/Noah Bethany Website/nbperrodin-site` — that folder is a working copy of the GitHub repo.
+
+## Links to hand out
+
+- **nbperrodin.com** — the website.
+- **nbperrodin.com/rsvp** (also `/std` and `/savethedate`) — the standalone RSVP page. Text or email this one to guests. After they submit, it drops them on the save-the-date page with the calendar buttons.
+- **nbperrodin.com/photos** — where the QR codes in `qr/` point. Guests land on a page with a button to the shared album.
+
+## What happens when a guest RSVPs
+
+1. The form posts to the Apps Script web app (`formEndpoint` in `assets/config.js`).
+2. A row is added to the `RSVPs` tab of the Sheet.
+3. nowabeth@gmail.com (cc noahvideographer@gmail.com) gets an alert email with the reply, the address, and running totals.
+4. The guest gets a confirmation from "Noah & Bethany" (sent from nowabeth@gmail.com, replies come back there). Accepts get the calendar invite attached.
+
+## Every Friday at 5 PM Central
+
+The script emails you **"Save-the-date list: N new RSVPs this week · N addresses to mail"** with:
+
+- the week's new RSVPs in a table, and
+- `save-the-date-mailing-list.csv` — every accepted guest's address that hasn't been marked as mailed. Upload it to Minted / Zola / Shutterfly's address book, or print labels from it.
+
+The `Mailing List` tab in the Sheet is refreshed at the same time (File → Download → CSV works too).
+
+**When you've mailed someone's card**, type a date in their `cardSent` cell on the `RSVPs` tab. They drop off the CSV and the tab. Declines are never included.
+
+Nothing is sent on a week with no new RSVPs and nothing left to mail.
+
+Handy functions in the Apps Script editor (function dropdown → Run):
+
+| Function | What it does |
 |---|---|
-| `index.html`, `save-the-date.html`, `wedding-party.html`, `registry.html`, `gallery.html`, `photos.html` | The six pages |
-| `assets/config.js` | **The only file you normally edit.** Names, date, venue, registry links, wedding party, photo album link, form endpoint |
-| `assets/styles.css` | Colors and fonts (top of file) |
-| `assets/photos/` | Hero image, gallery photos, card-front crop |
-| `nbperrodin-wedding.ics` | Calendar invite guests download |
-| `netlify.toml` | Clean URLs (`/save-the-date` instead of `/save-the-date.html`) |
-| `apps-script/Code.gs` | The Google Sheet backend that receives guest addresses |
-| `lob/` | Script + card design to mail physical save-the-dates |
-| `qr/` | QR codes (PNG/SVG) and print-ready photo-sharing signs (PDF) |
+| `previewDigest` | Sends the Friday email right now (marked `[preview]`, doesn't move the "since last week" marker) |
+| `buildMailingList` | Rebuilds the `Mailing List` tab from the `RSVPs` tab |
+| `stopWeeklyDigest` / `setupWeeklyDigest` | Pause / resume the Friday email |
+| `setup` | Repairs the header row if it ever gets messed up |
 
-## 1. Buy the domain (5 min)
+Visiting the web app URL (the `formEndpoint`) in a browser shows the current totals as a quick health check.
 
-Go to **cloudflare.com/products/registrar** or **namecheap.com**, search `nbperrodin.com`, and buy it (about $10–15/year). Cloudflare sells at cost and has the simplest DNS panel; either works. Skip any "hosting", "email", or "website builder" upsells.
+## The save-the-date card
 
-## 2. Put the site on Netlify (10 min)
+`save-the-date-card/` has the 4x6 postcard design:
 
-1. Create a free account at **app.netlify.com** (sign up with email or GitHub).
-2. On the Sites page, drag the **entire `nbperrodin-site` folder** onto the "Drag and drop your site folder here" box. It deploys in ~30 seconds to a random `something.netlify.app` URL. Open it and click around — everything except the form works already.
-3. **Domain management → Add a domain → `nbperrodin.com`** → Verify → Add domain. Netlify shows you DNS records to create.
-4. At your registrar's DNS page, add what Netlify asks for. Typically:
-   - `A` record, host `@`, value `75.2.60.5`
-   - `CNAME` record, host `www`, value `<your-site>.netlify.app`
-   
-   (Or choose "Use Netlify DNS" and change nameservers at the registrar — either is fine.)
-5. Wait 10–60 minutes. Netlify auto-issues the HTTPS certificate once DNS resolves. Set `nbperrodin.com` as the primary domain so `www` redirects to it.
+- `save-the-date-card-4x6.pdf` — print-ready, 2 pages (front, back), 6.25 × 4.25 in including 1/8 in bleed. Upload it to Vistaprint / Shutterfly / any print shop as a "4x6 postcard, full bleed", or use it as the artwork on Minted's "upload your own design" cards.
+- `preview-front.jpg`, `preview-back.jpg` — quick look.
+- `front.html`, `back.html` — the editable source. Change the text, open the file in a browser to check it, and ask Claude to re-export the PDF.
 
-**Updating the site later:** edit files, then drag the folder onto Netlify again (Deploys tab → drag-and-drop). Takes 30 seconds.
+The back has a stamp box and address lines, so cards can be hand-addressed or take a label printed from the mailing-list CSV.
 
-## 3. Connect the address form (5 min)
+## Changing the website
 
-Open `apps-script/Code.gs` — the instructions are at the top of the file. Short version:
+Everything a normal edit needs is in **`assets/config.js`**: names, date, venue, registry links, wedding party (names, roles, photos in `assets/photos/party/`), the photo-album link, gallery photo list, and the hero image. Colors and fonts are at the top of `assets/styles.css`.
 
-1. New Google Sheet → Extensions → Apps Script → paste the code → save.
-2. Run the `setup` function once (authorize it) to create the header row.
-3. Deploy → New deployment → Web app → Execute as **Me**, access **Anyone** → Deploy.
-4. Copy the `/exec` URL into `assets/config.js` → `formEndpoint`. Re-upload to Netlify.
-5. Submit the form yourself to test. You'll get an email and a new row.
+To publish a change: commit and push to `main` on GitHub (Noah's Mac folder is set up for this; GitHub Pages redeploys in about a minute). Photos are cached hard by browsers, so give a replaced photo a **new file name**.
 
-Every submission emails you and lands in the sheet with columns ready for the Lob script.
+If you change the ceremony time, also update `nbperrodin-wedding.ics` (`DTSTART`/`DTEND`, Central time, format `YYYYMMDDTHHMMSS`) and the `ics_()` function in `apps-script/Code.gs`.
 
-## 4. Fill in the details (5 min)
+## Changing the backend
 
-In `assets/config.js`:
-- `event.venueName`, `event.venueAddress`, `event.mapsUrl`, ceremony time
-- `bridesmaids` / `groomsmen` — names, roles, one-line notes, and photos (drop square-ish JPGs in `assets/photos/party/` and set `photo: "assets/photos/party/name.jpg"`)
-- `couple.hashtag` (or set it to `""`)
-- Any extra registries (Target, honeymoon fund…) in the `registry` array
+Edit `apps-script/Code.gs`, paste it into the Apps Script editor, save, then **Deploy → Manage deployments → pencil → Version: New version → Deploy**. The web app URL stays the same, so the website doesn't need to change.
 
-If you change the ceremony time, also update `nbperrodin-wedding.ics` (the `DTSTART`/`DTEND` lines; format is `YYYYMMDDTHHMMSS` in Central time).
+## Still to do
 
-## 5. Guest photo album (3 min)
-
-1. Google Photos → **Albums → Create album** → name it "Noah & Bethany's Wedding".
-2. Open the album → Share → **Create link**. Make sure "Collaborate" is **on** so guests can add photos.
-3. Paste that link into `assets/config.js` → `photoAlbumUrl`. Re-upload.
-
-The QR codes in `qr/` point to `nbperrodin.com/photos`, not directly at Google — so if you ever change albums, you only change config.js, and every printed sign still works.
-
-**Print:** `qr/photo-sign-5x7.pdf` fits a standard frame for tables; `photo-sign-8x10.pdf` for an easel at the entrance; `photo-sign-4x6.pdf` for tent cards. `qr-photos.png` / `.svg` are the bare code if you want to put it on a custom design.
-
-## 6. Mail the save-the-dates (Lob)
-
-See the top of `lob/send_save_the_dates.py` for the full walk-through. In short:
-
-1. Sign up at **lob.com** (free account; you pay per card, about $1–1.50 each incl. postage for 4x6).
-2. Fill in your return address at the top of the script.
-3. Export the Google Sheet as CSV → `lob/guests.csv`.
-4. Dry-run with the `test_` key. Open the proof PDFs Lob generates — check the photo, text, and that the address block is clean.
-5. Run with the `live_` key and `--send`. Cards go out in 1–2 business days; USPS First Class takes 3–5 more.
-
-The card front uses `assets/photos/card-front.jpg` from the live site and the back has the site QR code, so deploy the site *before* the live run.
-
-### Timing note
-
-The wedding is Nov 28, 2026 — under 12 weeks out. Save-the-dates normally go 4–6 months ahead, so consider: collect addresses for ~2 weeks, mail cards in one batch, and send formal invitations right behind them (6–8 weeks out, i.e. by early-to-mid October). The same Sheet + Lob flow works for invitations too — just swap the card HTML.
-
-## Notes on the photos
-
-Of the 92 proposal photos on the site, only 10 came through at full resolution; the rest are ~360px previews (they look fine in the grid but soft when enlarged). When you get the full-size exports from your photographer, drop them into `assets/photos/gallery/` with the same file names and re-upload — nothing else changes.
+- Paste the Google Photos shared-album link into `assets/config.js` → `photoAlbumUrl` (Photos → Albums → the album → Share → Create link, with "Collaborate" on).
+- Wedding party photos: drop square-ish JPGs in `assets/photos/party/` and set each person's `photo` in `config.js`.
+- Order the cards once the address list has filled in — the wedding is Nov 28, so aim to mail save-the-dates as early as possible and invitations 6–8 weeks out (early-to-mid October).

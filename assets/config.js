@@ -1,7 +1,7 @@
 /* ============================================================
    nbperrodin.com — SITE SETTINGS
    Everything you'll want to change lives in this one file.
-   Edit the values, re-upload to Netlify, done.
+   Edit the values, push to GitHub (see SETUP.md), done.
    ============================================================ */
 window.SITE = {
 

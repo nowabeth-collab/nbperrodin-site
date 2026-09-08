@@ -1,60 +1,55 @@
 /**
- * nbperrodin.com — RSVP collector + automatic save-the-date mailing
- * =================================================================
- * One script, two jobs:
- *   1. doPost(): receives every RSVP from the website, adds a row to the Sheet,
- *      alerts Noah & Bethany, and emails the guest a confirmation (from nowabeth@gmail.com).
- *   2. mailPendingCards(): every Friday at 5 PM, mails a physical save-the-date
- *      postcard (via Lob) to everyone who RSVP'd that week and hasn't been mailed yet.
- *      Runs in Google's cloud — no laptop needed.
+ * nbperrodin.com — RSVP collector + weekly save-the-date address digest
+ * ======================================================================
+ * One script, two jobs, all running in Google's cloud (no laptop needed):
+ *
+ *   1. doPost()          Receives every RSVP from the website, adds a row to the
+ *                        "Wedding RSVPs" Sheet, alerts Noah & Bethany, and emails the
+ *                        guest a confirmation (sent from nowabeth@gmail.com).
+ *
+ *   2. sendWeeklyDigest() Every Friday at 5 PM Central: emails Noah & Bethany the
+ *                        week's new RSVPs plus a ready-to-upload CSV of every accepted
+ *                        guest's mailing address that still needs a save-the-date card.
+ *                        It also refreshes the "Mailing List" tab in the Sheet, which you
+ *                        can download (File → Download → CSV) or copy into Minted, Zola,
+ *                        Shutterfly, etc. when you order the cards.
  *
  * ---------------------------------------------------------------
- * PART A — Connect the form (5 minutes)
+ * PART A — Connect the form (already done)
  * ---------------------------------------------------------------
- *  1. The Google Sheet "Wedding RSVPs" already exists (SHEET_ID below).
- *  2. This code lives in a standalone Apps Script project (script.google.com).
- *  3. Left sidebar → Project Settings (gear) → Time zone: "(GMT-06:00) Central Time".
- *  4. Back in the editor: pick "setup" in the function dropdown → Run. Authorize when
- *     asked (Advanced → Go to project → Allow). This creates the header row.
- *  5. Deploy → New deployment → gear → Web app:
- *        Execute as: Me      Who has access: Anyone
- *     → Deploy. Copy the Web app URL (ends in /exec) and send it to Claude.
+ *  1. The Google Sheet "Wedding RSVPs" exists (SHEET_ID below), owned by nowabeth@gmail.com.
+ *  2. This code lives in a standalone Apps Script project (script.google.com), same account.
+ *  3. Function dropdown → "setup" → Run. Creates/repairs the header row + Mailing List tab.
+ *  4. Deploy → New deployment → gear → Web app: Execute as Me, Who has access: Anyone.
+ *     The /exec URL is pasted into assets/config.js on the website as formEndpoint.
  *
  * ---------------------------------------------------------------
- * PART B — Automatic postcards via Lob (10 minutes)
+ * PART B — Weekly digest (already done)
  * ---------------------------------------------------------------
- *  1. Create an account at lob.com and add a payment method.
- *     Dashboard → Settings → API Keys: copy the TEST secret key (test_...) for now.
- *  2. In Apps Script: Project Settings → Script Properties → Add script property:
- *        LOB_API_KEY      test_xxxxxxxx           (switch to live_... when ready)
- *        FROM_NAME        Noah & Bethany
- *        FROM_ADDRESS1    your street address
- *        FROM_CITY        your city
- *        FROM_STATE       TX
- *        FROM_ZIP         your zip
- *  3. Function dropdown → "mailPendingCards" → Run. With a test_ key nothing is printed
- *     or charged; you'll get an email with proof links for every card. Check them.
- *  4. Happy? Change LOB_API_KEY to your live_ key.
- *  5. Function dropdown → "setupWeeklyMailing" → Run (once). From then on, every
- *     Friday at 5 PM Central, new RSVPs get a card and you get a summary email.
- *
- *  Cost: about $1–1.50 per 4x6 postcard incl. postage. Declines are never mailed.
- *  To pause: run "stopWeeklyMailing". To mail right now: run "mailPendingCards".
+ *  1. Function dropdown → "setupWeeklyDigest" → Run (once). From then on, every Friday
+ *     at 5 PM Central you get an email with the new RSVPs and the mailing-list CSV.
+ *  2. Want it right now? Run "previewDigest" (sends the same email, doesn't move the
+ *     "since last week" marker).
+ *  3. Mailed someone's card? Type a date (or "yes") in that row's cardSent column on the
+ *     RSVPs tab and they drop off the to-mail list.
+ *  4. To pause the weekly email: run "stopWeeklyDigest".
  *
  *  If you ever change this code: Deploy → Manage deployments → pencil → New version → Deploy.
  */
 
 var SHEET_ID = "1lB1tkCrp1VGeyig1z1_khrTo9GwFSUGR7MVLYqRZN4s"; // the "Wedding RSVPs" Google Sheet (nowabeth@gmail.com)
 var SHEET_NAME = "RSVPs";
-var NOTIFY_EMAIL = "nowabeth@gmail.com";        // where RSVP alerts go (set to "" to disable)
+var LIST_SHEET_NAME = "Mailing List";
+var NOTIFY_EMAIL = "nowabeth@gmail.com";        // where RSVP alerts + the Friday digest go (set to "" to disable)
 var NOTIFY_CC = "noahvideographer@gmail.com";    // also copy Noah
 var SEND_GUEST_CONFIRMATION = true;              // email each guest a confirmation (sent from the account that owns this script)
 var SITE = "https://nbperrodin.com";
+var TIME_ZONE = "America/Chicago";
 
 var COLUMNS = [
   "submittedAt", "attending", "firstName", "lastName", "guestCount", "guestNames", "email", "phone",
   "address1", "address2", "city", "state", "zip", "country", "note", "source",
-  "mailedAt", "lobId", "lobProof", "mailError"
+  "cardSent"   // you fill this in by hand once a save-the-date card has gone out
 ];
 
 /* ================================================================
@@ -67,6 +62,7 @@ function doPost(e) {
     var row = COLUMNS.map(function (c) {
       var v = data[c];
       if (c === "submittedAt") v = v || new Date().toISOString();
+      if (c === "cardSent") v = "";
       if (c === "state" && v) v = String(v).trim().toUpperCase();
       if (c === "zip" && v) v = String(v).trim();
       if (c === "phone" && v) v = String(v).replace(/[^\d+]/g, "");
@@ -111,151 +107,162 @@ function sendGuestConfirmation_(d) {
       "<p><strong>Saturday, November 28, 2026</strong><br>Ceremony at 5:00 PM, reception to follow<br>" +
       "Camp Hosea &middot; 17476 FM 3090, Anderson, TX 77830</p>" +
       "<p>The calendar invite is attached, and everything else — directions, the registry, our story — is at " +
-      "<a href=\"" + SITE + "\">nbperrodin.com</a>. A save-the-date card is on its way to your mailbox, with a formal invitation to follow.</p>" +
+      "<a href=\"" + SITE + "\">nbperrodin.com</a>. Keep an eye on your mailbox: a save-the-date card and a formal invitation will follow.</p>" +
       "<p>With love,<br>Noah &amp; Bethany</p>"
     : "<p>Hi " + esc_(first) + ",</p>" +
       "<p>Thank you for letting us know. We're sorry you can't be there on November 28 — you'll be missed, and we're grateful you took the time to respond.</p>" +
       "<p>With love,<br>Noah &amp; Bethany</p>";
   var opts = { name: "Noah & Bethany", htmlBody: html, replyTo: NOTIFY_EMAIL };
-  if (yes) {
-    try {
-      var ics = UrlFetchApp.fetch(SITE + "/nbperrodin-wedding.ics").getBlob().setName("Noah-and-Bethany-Wedding.ics").setContentType("text/calendar");
-      opts.attachments = [ics];
-    } catch (e) { /* attachment is a nice-to-have */ }
-  }
+  if (yes) opts.attachments = [Utilities.newBlob(ics_(), "text/calendar", "Noah-and-Bethany-Wedding.ics")];
   MailApp.sendEmail(d.email, subject, yes ? "Thank you for your RSVP! Details at " + SITE : "Thank you for letting us know.", opts);
+}
+
+/** The calendar invite, generated here so it never depends on the website being reachable. */
+function ics_() {
+  return [
+    "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//nbperrodin.com//Wedding//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
+    "BEGIN:VTIMEZONE", "TZID:America/Chicago", "BEGIN:STANDARD", "DTSTART:20261101T020000",
+    "TZOFFSETFROM:-0500", "TZOFFSETTO:-0600", "TZNAME:CST", "END:STANDARD", "END:VTIMEZONE",
+    "BEGIN:VEVENT",
+    "UID:wedding-2026-11-28@nbperrodin.com",
+    "DTSTAMP:" + Utilities.formatDate(new Date(), "UTC", "yyyyMMdd'T'HHmmss'Z'"),
+    "DTSTART;TZID=America/Chicago:20261128T170000",
+    "DTEND;TZID=America/Chicago:20261128T230000",
+    "SUMMARY:Noah & Bethany's Wedding",
+    "DESCRIPTION:Ceremony at 5:00 PM\\, reception to follow. Details and updates at " + SITE,
+    "LOCATION:Camp Hosea\\, 17476 FM 3090\\, Anderson\\, TX 77830",
+    "URL:" + SITE, "STATUS:CONFIRMED",
+    "BEGIN:VALARM", "TRIGGER:-P7D", "ACTION:DISPLAY", "DESCRIPTION:Noah & Bethany's wedding is one week away", "END:VALARM",
+    "END:VEVENT", "END:VCALENDAR", ""
+  ].join("\r\n");
 }
 
 function esc_(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
 
 // Visiting the /exec URL in a browser shows this — handy to confirm it's deployed.
 function doGet() {
-  return json_({ ok: true, service: "nbperrodin RSVP", totals: totals_() });
+  return json_({ ok: true, service: "nbperrodin RSVP", totals: totals_(), cardsToMail: pendingCards_().length });
 }
 
-/** Run once from the editor: creates the sheet + header row. */
-function setup() { getSheet_(); }
+/** Run once from the editor: creates/repairs the header row and the Mailing List tab. */
+function setup() {
+  var sheet = getSheet_();
+  var width = Math.max(sheet.getLastColumn(), COLUMNS.length);
+  sheet.getRange(1, 1, 1, width).clearContent().setFontWeight("normal");
+  sheet.getRange(1, 1, 1, COLUMNS.length).setValues([COLUMNS]).setFontWeight("bold");
+  sheet.setFrozenRows(1);
+  buildMailingList();
+}
 
 /* ================================================================
- * PART B — Weekly postcard mailing through Lob
+ * PART B — Friday digest + mailing list
  * ================================================================ */
-var LOB_API = "https://api.lob.com/v1";
-var POSTCARD_SIZE = "4x6";
-var MAIL_TYPE = "usps_first_class";
+var LIST_HEADER = ["First Name", "Last Name", "Guests", "Guest Names", "Address 1", "Address 2", "City", "State", "Zip", "Country", "Email", "Phone", "Card sent", "RSVP'd"];
 
-function mailPendingCards() {
+/** Trigger handler — Fridays at 5 PM Central. */
+function sendWeeklyDigest() { digest_(true); }
+
+/** Same email, right now, without moving the "since last time" marker. */
+function previewDigest() { digest_(false); }
+
+function digest_(advanceMarker) {
   var props = PropertiesService.getScriptProperties();
-  var key = props.getProperty("LOB_API_KEY");
-  if (!key) throw new Error("Add LOB_API_KEY in Project Settings → Script Properties first.");
-  var live = key.indexOf("live_") === 0;
-  var from = {
-    name: props.getProperty("FROM_NAME") || "Noah & Bethany",
-    address_line1: props.getProperty("FROM_ADDRESS1"),
-    address_city: props.getProperty("FROM_CITY"),
-    address_state: props.getProperty("FROM_STATE"),
-    address_zip: props.getProperty("FROM_ZIP"),
-  };
-  if (!from.address_line1 || !from.address_city || !from.address_state || !from.address_zip) {
-    throw new Error("Fill in FROM_ADDRESS1, FROM_CITY, FROM_STATE, FROM_ZIP in Script Properties.");
-  }
+  var now = new Date();
+  var since = new Date(props.getProperty("LAST_DIGEST_AT") || (now.getTime() - 7 * 864e5));
+  var rows = readRows_();
+  var fresh = rows.filter(function (r) { var d = parseDate_(r.submittedAt); return d && d > since; });
+  var pending = pendingCards_(rows);
+  var url = SpreadsheetApp.openById(SHEET_ID).getUrl();
 
-  // Card artwork lives on the website so it's always the current design.
-  var front = UrlFetchApp.fetch(SITE + "/lob/card_front.html").getContentText();
-  var back  = UrlFetchApp.fetch(SITE + "/lob/card_back.html").getContentText();
+  buildMailingList(rows);
+  if (advanceMarker) props.setProperty("LAST_DIGEST_AT", now.toISOString());
+  if (!fresh.length && !pending.length) { Logger.log("Nothing new and no cards waiting — no digest sent."); return; }
+  if (!NOTIFY_EMAIL) return;
 
-  var sheet = getSheet_();
-  var values = sheet.getDataRange().getValues();
-  var header = values[0];
-  var col = {}; header.forEach(function (h, i) { col[h] = i; });
+  var freshYes = fresh.filter(function (r) { return r.attending === "yes"; });
+  var freshNo = fresh.filter(function (r) { return r.attending === "no"; });
+  var sinceText = Utilities.formatDate(since, TIME_ZONE, "EEE, MMM d");
+  var subject = (advanceMarker ? "" : "[preview] ") +
+    "Save-the-date list: " + fresh.length + " new RSVP" + (fresh.length === 1 ? "" : "s") + " this week · " +
+    pending.length + " address" + (pending.length === 1 ? "" : "es") + " to mail";
 
-  var sent = [], skipped = [], failed = [];
-  for (var r = 1; r < values.length; r++) {
-    var row = values[r];
-    var get = function (name) { return String(row[col[name]] == null ? "" : row[col[name]]).trim(); };
-    var name = (get("firstName") + " " + get("lastName")).trim();
-    if (!name || !get("address1")) continue;
-    if (get("mailedAt")) continue;                          // already mailed
-    if (get("attending").toLowerCase() === "no") { skipped.push(name + " (declined)"); continue; }
-    if (get("mailError") && get("mailError").indexOf("undeliverable") === 0) { skipped.push(name + " (bad address — fix it in the sheet and clear mailError)"); continue; }
+  var html = "<div style=\"font-family:Georgia,serif;color:#3A3833;max-width:640px\">" +
+    "<h2 style=\"font-weight:normal;margin:0 0 6px\">This week's RSVPs</h2>" +
+    "<p style=\"margin:0 0 14px;color:#7A736A\">Since " + sinceText + ": <strong>" + freshYes.length + " accepted</strong>, " + freshNo.length + " declined. " +
+    "Overall: " + totals_(rows) + ".</p>" +
+    (fresh.length ? table_(fresh) : "<p><em>No new RSVPs this week.</em></p>") +
+    "<h2 style=\"font-weight:normal;margin:22px 0 6px\">Save-the-date cards still to mail: " + pending.length + "</h2>" +
+    "<p style=\"margin:0 0 10px\">The attached CSV has every accepted guest's address that hasn't been marked <code>cardSent</code> yet — " +
+    "upload it straight to Minted / Zola / Shutterfly or print labels from it. The same list lives in the " +
+    "<a href=\"" + url + "\">“Mailing List” tab of the Sheet</a>.</p>" +
+    "<p style=\"color:#7A736A;font-size:13px\">Once a card is in the mail, type a date in that guest's cardSent column on the RSVPs tab and they drop off this list. " +
+    "Declines are never included.</p></div>";
 
-    try {
-      var addr = verifyAddress_(key, get("address1"), get("address2"), get("city"), get("state"), get("zip"));
-      var payload = {
-        description: "Save the date — " + name,
-        to: { name: name.substring(0, 40), address_line1: addr.address_line1, address_line2: addr.address_line2,
-              address_city: addr.address_city, address_state: addr.address_state, address_zip: addr.address_zip },
-        from: from,
-        front: front,
-        back: back,
-        size: POSTCARD_SIZE,
-        mail_type: MAIL_TYPE,
-        merge_variables: { first_name: get("firstName") },
-        metadata: { email: get("email"), row: String(r + 1) },
-      };
-      var res = lob_(key, "/postcards", payload);
-      sheet.getRange(r + 1, col.mailedAt + 1).setValue(live ? new Date() : "TEST " + new Date().toISOString());
-      sheet.getRange(r + 1, col.lobId + 1).setValue(res.id);
-      sheet.getRange(r + 1, col.lobProof + 1).setValue(res.url || "");
-      sheet.getRange(r + 1, col.mailError + 1).setValue("");
-      sent.push(name + (res.url ? " — proof: " + res.url : ""));
-    } catch (err) {
-      sheet.getRange(r + 1, col.mailError + 1).setValue(String(err.message || err));
-      failed.push(name + " — " + (err.message || err));
-    }
-    Utilities.sleep(300);
-  }
+  var text = "This week's RSVPs (since " + sinceText + "): " + freshYes.length + " accepted, " + freshNo.length + " declined. Overall: " + totals_(rows) + ".\n\n" +
+    fresh.map(function (r) { return line_(r); }).join("\n") + "\n\n" +
+    "Save-the-date cards still to mail: " + pending.length + " (CSV attached)\nSheet: " + url;
 
-  var summary =
-    (live ? "LIVE — cards were mailed." : "TEST MODE — nothing was printed or charged. Open the proof links to check the design.") + "\n\n" +
-    "Mailed (" + sent.length + "):\n" + (sent.join("\n") || "none") + "\n\n" +
-    "Skipped (" + skipped.length + "):\n" + (skipped.join("\n") || "none") + "\n\n" +
-    "Problems (" + failed.length + "):\n" + (failed.join("\n") || "none") + "\n\n" +
-    "Sheet: " + SpreadsheetApp.openById(SHEET_ID).getUrl();
-  if (NOTIFY_EMAIL) {
-    MailApp.sendEmail({ to: NOTIFY_EMAIL, cc: NOTIFY_CC, subject: (live ? "Save-the-dates mailed: " : "Save-the-date TEST run: ") + sent.length + " cards", body: summary });
-  }
-  Logger.log(summary);
-  return summary;
+  MailApp.sendEmail({
+    to: NOTIFY_EMAIL, cc: NOTIFY_CC, subject: subject, body: text, htmlBody: html, name: "nbperrodin.com",
+    attachments: [Utilities.newBlob(csv_([LIST_HEADER].concat(pending.map(listRow_))), "text/csv", "save-the-date-mailing-list.csv")]
+  });
+  Logger.log("Digest sent: " + subject);
 }
 
-/** Run once: mails pending cards every Friday at 5 PM (script time zone = Central). */
-function setupWeeklyMailing() {
-  stopWeeklyMailing();
-  ScriptApp.newTrigger("mailPendingCards").timeBased().onWeekDay(ScriptApp.WeekDay.FRIDAY).atHour(17).create();
-  Logger.log("Weekly mailing scheduled: Fridays at 5 PM.");
+/** Rebuilds the "Mailing List" tab: every accepted guest with an address, newest last. */
+function buildMailingList(rows) {
+  rows = rows || readRows_();
+  var ss = SpreadsheetApp.openById(SHEET_ID);
+  var list = ss.getSheetByName(LIST_SHEET_NAME) || ss.insertSheet(LIST_SHEET_NAME);
+  var accepted = rows.filter(function (r) { return r.attending === "yes" && r.address1; });
+  var values = [LIST_HEADER].concat(accepted.map(listRow_));
+  list.clearContents();
+  list.getRange(1, 1, values.length, LIST_HEADER.length).setValues(values);
+  list.getRange(1, 1, 1, LIST_HEADER.length).setFontWeight("bold");
+  list.setFrozenRows(1);
+  return accepted.length;
 }
 
-/** Removes the weekly schedule (RSVPs still come in; nothing is mailed). */
-function stopWeeklyMailing() {
+/** Accepted guests with an address and no cardSent yet. */
+function pendingCards_(rows) {
+  return (rows || readRows_()).filter(function (r) { return r.attending === "yes" && r.address1 && !r.cardSent; });
+}
+
+function listRow_(r) {
+  return [r.firstName, r.lastName, r.guestCount || 1, r.guestNames, r.address1, r.address2, r.city, r.state, r.zip, r.country || "USA",
+          r.email, r.phone, r.cardSent, fmt_(r.submittedAt)];
+}
+
+function table_(rows) {
+  var cell = function (s, extra) { return "<td style=\"padding:6px 10px;border-bottom:1px solid #EAE3D8;vertical-align:top;" + (extra || "") + "\">" + esc_(s == null ? "" : s) + "</td>"; };
+  return "<table style=\"border-collapse:collapse;width:100%;font-size:14px\">" +
+    "<tr style=\"text-align:left;color:#7A736A\"><th style=\"padding:6px 10px\">Guest</th><th style=\"padding:6px 10px\">Reply</th><th style=\"padding:6px 10px\">Address</th><th style=\"padding:6px 10px\">Note</th></tr>" +
+    rows.map(function (r) {
+      var yes = r.attending === "yes";
+      return "<tr>" + cell(r.firstName + " " + r.lastName + (r.email ? "\n" + r.email : ""), "white-space:pre-line") +
+        cell(yes ? "Yes · " + (r.guestCount || 1) + (Number(r.guestCount) > 1 && r.guestNames ? " (" + r.guestNames + ")" : "") : "No", yes ? "color:#4E5B44" : "color:#B98E8C") +
+        cell([r.address1, r.address2, [r.city, r.state].filter(Boolean).join(", ") + " " + (r.zip || "")].filter(function (s) { return s && s.trim(); }).join("\n"), "white-space:pre-line") +
+        cell(r.note) + "</tr>";
+    }).join("") + "</table>";
+}
+
+function line_(r) {
+  return (r.attending === "yes" ? "YES (" + (r.guestCount || 1) + ") " : "NO  ") + r.firstName + " " + r.lastName +
+    " — " + [r.address1, r.address2, r.city, r.state, r.zip].filter(Boolean).join(", ") + (r.note ? " — note: " + r.note : "");
+}
+
+/** Run once: sends the digest every Friday at 5 PM Central. */
+function setupWeeklyDigest() {
+  stopWeeklyDigest();
+  ScriptApp.newTrigger("sendWeeklyDigest").timeBased().onWeekDay(ScriptApp.WeekDay.FRIDAY).atHour(17).inTimezone(TIME_ZONE).create();
+  Logger.log("Weekly digest scheduled: Fridays at 5 PM Central.");
+}
+
+/** Removes the weekly schedule (RSVPs still come in; no Friday email). */
+function stopWeeklyDigest() {
   ScriptApp.getProjectTriggers().forEach(function (t) {
-    if (t.getHandlerFunction() === "mailPendingCards") ScriptApp.deleteTrigger(t);
+    if (t.getHandlerFunction() === "sendWeeklyDigest") ScriptApp.deleteTrigger(t);
   });
-}
-
-function verifyAddress_(key, line1, line2, city, state, zip) {
-  var v = lob_(key, "/us_verifications", { primary_line: line1, secondary_line: line2 || "", city: city, state: state, zip_code: zip });
-  if (v.deliverability === "undeliverable") throw new Error("undeliverable address");
-  var c = v.components || {};
-  return {
-    address_line1: v.primary_line,
-    address_line2: v.secondary_line || "",
-    address_city: c.city || city,
-    address_state: c.state || state,
-    address_zip: c.zip_code ? c.zip_code + (c.zip_code_plus_4 ? "-" + c.zip_code_plus_4 : "") : zip,
-  };
-}
-
-function lob_(key, path, payload) {
-  var res = UrlFetchApp.fetch(LOB_API + path, {
-    method: "post",
-    contentType: "application/json",
-    payload: JSON.stringify(payload),
-    headers: { Authorization: "Basic " + Utilities.base64Encode(key + ":") },
-    muteHttpExceptions: true,
-  });
-  var body = JSON.parse(res.getContentText() || "{}");
-  if (res.getResponseCode() >= 300) throw new Error((body.error && body.error.message) || ("Lob error " + res.getResponseCode()));
-  return body;
 }
 
 /* ================================================================
@@ -273,16 +280,47 @@ function getSheet_() {
   return sheet;
 }
 
-function totals_() {
+/** Every RSVP row as an object keyed by header name (strings trimmed, attending lower-cased). */
+function readRows_() {
   var values = getSheet_().getDataRange().getValues();
-  var header = values[0], col = {}; header.forEach(function (h, i) { col[h] = i; });
+  if (values.length < 2) return [];
+  var header = values[0].map(String);
+  return values.slice(1).map(function (row) {
+    var o = {};
+    header.forEach(function (h, i) { var v = row[i]; o[h] = v instanceof Date ? v : String(v == null ? "" : v).trim(); });
+    o.attending = String(o.attending || "").toLowerCase();
+    return o;
+  }).filter(function (o) { return o.firstName || o.lastName || o.email; });
+}
+
+function totals_(rows) {
+  rows = rows || readRows_();
   var yes = 0, no = 0, guests = 0;
-  for (var r = 1; r < values.length; r++) {
-    var a = String(values[r][col.attending] || "").toLowerCase();
-    if (a === "yes") { yes++; guests += Number(values[r][col.guestCount]) || 1; }
-    else if (a === "no") no++;
-  }
+  rows.forEach(function (r) {
+    if (r.attending === "yes") { yes++; guests += Number(r.guestCount) || 1; }
+    else if (r.attending === "no") no++;
+  });
   return yes + " accepted (" + guests + " guests), " + no + " declined";
+}
+
+function parseDate_(v) {
+  if (v instanceof Date) return isNaN(v) ? null : v;
+  var d = new Date(String(v || ""));
+  return isNaN(d) ? null : d;
+}
+
+function fmt_(v) {
+  var d = parseDate_(v);
+  return d ? Utilities.formatDate(d, TIME_ZONE, "MMM d, yyyy") : String(v || "");
+}
+
+function csv_(rows) {
+  return rows.map(function (row) {
+    return row.map(function (v) {
+      var s = v instanceof Date ? fmt_(v) : String(v == null ? "" : v);
+      return /[",\n\r]/.test(s) ? "\"" + s.replace(/"/g, "\"\"") + "\"" : s;
+    }).join(",");
+  }).join("\r\n") + "\r\n";
 }
 
 function json_(obj) {
