@@ -2,8 +2,8 @@
  * nbperrodin.com — RSVP collector + automatic save-the-date mailing
  * =================================================================
  * One script, two jobs:
- *   1. doPost(): receives every RSVP from the website and adds a row to the Sheet
- *      (and emails Noah).
+ *   1. doPost(): receives every RSVP from the website, adds a row to the Sheet,
+ *      alerts Noah & Bethany, and emails the guest a confirmation (from nowabeth@gmail.com).
  *   2. mailPendingCards(): every Friday at 5 PM, mails a physical save-the-date
  *      postcard (via Lob) to everyone who RSVP'd that week and hasn't been mailed yet.
  *      Runs in Google's cloud — no laptop needed.
@@ -44,9 +44,11 @@
  *  If you ever change this code: Deploy → Manage deployments → pencil → New version → Deploy.
  */
 
-var SHEET_ID = "1zZr3qCmm7XdjP0VpEJq-rjNCkj0rogKU8Je23eU5yLU"; // the "Wedding RSVPs" Google Sheet
+var SHEET_ID = "1lB1tkCrp1VGeyig1z1_khrTo9GwFSUGR7MVLYqRZN4s"; // the "Wedding RSVPs" Google Sheet (nowabeth@gmail.com)
 var SHEET_NAME = "RSVPs";
-var NOTIFY_EMAIL = "noahvideographer@gmail.com"; // set to "" to disable per-RSVP emails
+var NOTIFY_EMAIL = "nowabeth@gmail.com";        // where RSVP alerts go (set to "" to disable)
+var NOTIFY_CC = "noahvideographer@gmail.com";    // also copy Noah
+var SEND_GUEST_CONFIRMATION = true;              // email each guest a confirmation (sent from the account that owns this script)
 var SITE = "https://nbperrodin.com";
 
 var COLUMNS = [
@@ -76,6 +78,7 @@ function doPost(e) {
       var yes = data.attending === "yes";
       MailApp.sendEmail({
         to: NOTIFY_EMAIL,
+        cc: NOTIFY_CC,
         subject: (yes ? "RSVP YES (" + (data.guestCount || 1) + "): " : "RSVP no: ") + data.firstName + " " + data.lastName,
         body:
           (yes ? "ACCEPTS — " + (data.guestCount || 1) + " attending" + (data.guestNames ? ": " + data.guestNames : "") : "DECLINES") + "\n\n" +
@@ -88,11 +91,42 @@ function doPost(e) {
           "\nSheet: " + SpreadsheetApp.openById(SHEET_ID).getUrl()
       });
     }
+    if (SEND_GUEST_CONFIRMATION && data.email) {
+      try { sendGuestConfirmation_(data); } catch (mailErr) { Logger.log("Guest email failed: " + mailErr); }
+    }
     return json_({ ok: true });
   } catch (err) {
     return json_({ ok: false, error: String(err) });
   }
 }
+
+/** Confirmation email to the guest. Goes out from the Google account that owns this script. */
+function sendGuestConfirmation_(d) {
+  var yes = d.attending === "yes";
+  var first = d.firstName || "there";
+  var subject = yes ? "You're on the list — Noah & Bethany, November 28" : "Thank you, " + first + " — Noah & Bethany";
+  var html = yes
+    ? "<p>Hi " + esc_(first) + ",</p>" +
+      "<p>Thank you for your RSVP — we can't wait to celebrate with you!</p>" +
+      "<p><strong>Saturday, November 28, 2026</strong><br>Ceremony at 5:00 PM, reception to follow<br>" +
+      "Camp Hosea &middot; 17476 FM 3090, Anderson, TX 77830</p>" +
+      "<p>The calendar invite is attached, and everything else — directions, the registry, our story — is at " +
+      "<a href=\"" + SITE + "\">nbperrodin.com</a>. A save-the-date card is on its way to your mailbox, with a formal invitation to follow.</p>" +
+      "<p>With love,<br>Noah &amp; Bethany</p>"
+    : "<p>Hi " + esc_(first) + ",</p>" +
+      "<p>Thank you for letting us know. We're sorry you can't be there on November 28 — you'll be missed, and we're grateful you took the time to respond.</p>" +
+      "<p>With love,<br>Noah &amp; Bethany</p>";
+  var opts = { name: "Noah & Bethany", htmlBody: html, replyTo: NOTIFY_EMAIL };
+  if (yes) {
+    try {
+      var ics = UrlFetchApp.fetch(SITE + "/nbperrodin-wedding.ics").getBlob().setName("Noah-and-Bethany-Wedding.ics").setContentType("text/calendar");
+      opts.attachments = [ics];
+    } catch (e) { /* attachment is a nice-to-have */ }
+  }
+  MailApp.sendEmail(d.email, subject, yes ? "Thank you for your RSVP! Details at " + SITE : "Thank you for letting us know.", opts);
+}
+
+function esc_(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
 
 // Visiting the /exec URL in a browser shows this — handy to confirm it's deployed.
 function doGet() {
@@ -178,7 +212,7 @@ function mailPendingCards() {
     "Problems (" + failed.length + "):\n" + (failed.join("\n") || "none") + "\n\n" +
     "Sheet: " + SpreadsheetApp.openById(SHEET_ID).getUrl();
   if (NOTIFY_EMAIL) {
-    MailApp.sendEmail({ to: NOTIFY_EMAIL, subject: (live ? "Save-the-dates mailed: " : "Save-the-date TEST run: ") + sent.length + " cards", body: summary });
+    MailApp.sendEmail({ to: NOTIFY_EMAIL, cc: NOTIFY_CC, subject: (live ? "Save-the-dates mailed: " : "Save-the-date TEST run: ") + sent.length + " cards", body: summary });
   }
   Logger.log(summary);
   return summary;

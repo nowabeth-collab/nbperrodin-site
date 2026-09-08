@@ -32,7 +32,7 @@ window.SITE = {
 
   // --- Where guest info goes (Google Apps Script web app URL) --
   // After you deploy apps-script/Code.gs, paste the URL that ends in /exec
-  formEndpoint: "PASTE_YOUR_APPS_SCRIPT_URL_HERE",
+  formEndpoint: "https://script.google.com/macros/s/AKfycbzBRIuQuFdxXj_Tz5WrOFFpaPe8LoP9FVgICaea5GvOTAcsnubcSfypiQWGE8alaPk3zQ/exec",
 
   // --- Registry ----------------------------------------------
   registry: [
