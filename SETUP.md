@@ -67,7 +67,7 @@ The back has a stamp box and address lines, so cards can be hand-addressed or ta
 
 - `invitation-5x7.pdf` — print-ready, 2 pages (front, back), 5.25 × 7.25 in including 1/8 in bleed. Order as a "5x7 flat card, full bleed, printed both sides" (Vistaprint, Shutterfly, Minted "upload your design", or a local print shop). A5/5x7 envelopes fit it.
 - `preview-front.jpg`, `preview-back.jpg` — quick look.
-- `front.html`, `back.html` — editable source. The RSVP-by date (November 1) and the details copy live in `back.html`; the QR code points to nbperrodin.com/rsvp (`assets/qr-rsvp.png`).
+- `front.html`, `back.html` — editable source. The RSVP-by date (October 17) and the details copy live in `back.html`; the QR code points to nbperrodin.com/rsvp (`assets/qr-rsvp.png`).
 
 Mail invitations 6–8 weeks before the wedding (early-to-mid October).
 
