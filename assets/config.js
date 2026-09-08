@@ -144,7 +144,7 @@ window.SITE = {
 
   // --- Our story (welcome page) -------------------------------
   story: [
-    "Our story has been shaped by faith, friendship, and a love that continues to grow through every season. We have laughed together, prayed together, challenged one another, and learned what it means to choose each other every day.",
+    "Our story began at a Bible study, and it has been shaped ever since by faith, friendship, and a love that continues to grow through every season. We have laughed together, prayed together, challenged one another, and learned what it means to choose each other every day.",
     "Now, as we prepare to become husband and wife, we are building a life centered on Christ, sacrificial love, and a commitment to always give one another our whole hearts. On November 28, 2026, we cannot wait to celebrate that commitment in Anderson with the family and friends who have loved, encouraged, and supported us along the way.",
   ],
 };
