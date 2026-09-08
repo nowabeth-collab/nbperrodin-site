@@ -103,11 +103,20 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (form.website.value) return; // honeypot filled → bot
+      // Required-field check with a friendly message (form has novalidate)
+      const missing = [...form.querySelectorAll("[required]")].filter((f) => !f.value.trim());
+      const emailBad = form.email.value && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.value.trim());
+      status.className = "form-status";
+      if (missing.length || emailBad) {
+        missing.forEach((f) => f.setAttribute("aria-invalid", "true"));
+        status.textContent = missing.length ? "Please fill in the highlighted fields." : "That email address doesn't look right.";
+        status.classList.add("err"); (missing[0] || form.email).focus(); return;
+      }
+      form.querySelectorAll("[aria-invalid]").forEach((f) => f.removeAttribute("aria-invalid"));
       const data = Object.fromEntries(new FormData(form).entries());
       delete data.website;
       data.submittedAt = new Date().toISOString();
       data.source = location.href;
-      status.className = "form-status";
       if (!S.formEndpoint || S.formEndpoint.startsWith("PASTE_")) {
         status.textContent = "The form isn't connected yet — the Apps Script URL still needs to be added to config.js.";
         status.classList.add("err"); return;
@@ -119,6 +128,11 @@
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(data),
         });
+        if (form.dataset.redirect) {
+          submitBtn.textContent = "Saved — one more step…";
+          const url = form.dataset.redirect.replace("?thanks=1", "?thanks=" + encodeURIComponent(data.firstName));
+          location.href = url; return;
+        }
         form.hidden = true;
         status.innerHTML = `<strong>Thank you, ${escapeHtml(data.firstName)}!</strong> We have your address — watch your mailbox for the save the date. Don't forget to add the day to your calendar above.`;
         status.classList.add("ok");
@@ -129,6 +143,15 @@
         submitBtn.disabled = false; submitBtn.textContent = "Send my address";
       }
     });
+  }
+
+  /* ---------- "Thanks" banner after the standalone form ---------- */
+  const thanks = new URLSearchParams(location.search).get("thanks");
+  const cal = document.getElementById("calendar");
+  if (thanks && cal) {
+    const name = thanks === "1" ? "" : ", " + thanks;
+    cal.insertAdjacentHTML("beforebegin", `<div class="form-status ok thanks-banner" role="status">Thank you${escapeHtml(name)}! Your address is in. One last thing — add the day to your calendar below.</div>`);
+    setTimeout(() => cal.scrollIntoView({ behavior: "smooth", block: "center" }), 300);
   }
 
   /* ---------- Wedding party ---------- */

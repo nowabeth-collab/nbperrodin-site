@@ -22,11 +22,15 @@
   from = "/photos"
   to = "/photos.html"
   status = 200
-# Short link printed on cards
+# Standalone save-the-date link for guests (short, printable)
 [[redirects]]
   from = "/std"
-  to = "/save-the-date.html"
-  status = 301
+  to = "/std.html"
+  status = 200
+[[redirects]]
+  from = "/savethedate"
+  to = "/std.html"
+  status = 200
 
 [[headers]]
   for = "/*.ics"

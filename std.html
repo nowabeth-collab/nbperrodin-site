@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Save the Date · Noah &amp; Bethany · 11.28.2026</title>
+  <meta name="description" content="Noah and Bethany are getting married November 28, 2026 in Anderson, Texas. Send us your address and we'll mail your save the date.">
+  <meta property="og:title" content="Save the Date · Noah & Bethany · 11.28.2026">
+  <meta property="og:description" content="We're getting married! Send us your mailing address so we can send your save the date.">
+  <meta property="og:image" content="https://nbperrodin.com/assets/photos/og-image.jpg">
+  <meta property="og:url" content="https://nbperrodin.com/std">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap">
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    .std-page { min-height: 100vh; display: flex; flex-direction: column; }
+    .std-top { text-align: center; padding: clamp(2rem, 5vw, 3.5rem) 1.25rem 0; }
+    .std-top .head-arch { width: min(560px, 92vw); margin: 0 auto 0.25rem; }
+    .std-top h1 { font-size: clamp(2.4rem, 7vw, 4rem); }
+    .std-top .names { font-family: var(--display); font-size: clamp(1.4rem, 3.5vw, 1.9rem); color: var(--ink); margin: 0.6rem 0 0; }
+    .std-top .names em { font-style: italic; color: var(--gold); }
+    .std-top .rule { margin: 1.2rem auto; }
+    .std-top p { margin-inline: auto; }
+    .std-top p.lead { margin: 0 auto; }
+    .std-form-wrap { padding: 1.5rem 1.25rem clamp(3rem, 6vw, 5rem); }
+    .std-form-wrap .form-card { margin-top: 0.5rem; }
+    .std-foot { margin-top: auto; text-align: center; font-size: 0.8rem; color: var(--ink-soft); padding: 1.5rem 1.25rem 2rem; border-top: 1px solid var(--line); }
+    .std-foot a { color: var(--ink-soft); }
+  </style>
+</head>
+<body class="std-page">
+  <main>
+    <section class="std-top">
+      <div class="head-arch" data-floral="arch"></div>
+      <p class="eyebrow">Save the date</p>
+      <h1>11 · 28 · 2026</h1>
+      <p class="names">Noah <em>&amp;</em> Bethany</p>
+      <p class="hero-place"><span data-fill="event.venueName">Camp Hosea</span> · <span data-fill="event.city">Anderson, TX</span></p>
+      <div class="rule center"></div>
+      <p class="lead">We're getting married, and we'd love for you to be there. Tell us where to mail your save-the-date card and we'll take it from there.</p>
+    </section>
+
+    <section class="std-form-wrap">
+      <form class="form-card has-corner" id="std-form" data-redirect="save-the-date.html?thanks=1#calendar" novalidate>
+        <div class="corner-br" data-floral="br"></div>
+        <div class="form-grid">
+          <div>
+            <label for="firstName">First name</label>
+            <input id="firstName" name="firstName" autocomplete="given-name" required>
+          </div>
+          <div>
+            <label for="lastName">Last name</label>
+            <input id="lastName" name="lastName" autocomplete="family-name" required>
+          </div>
+          <div class="full">
+            <label for="householdNames">Others in your household (optional)</label>
+            <input id="householdNames" name="householdNames" placeholder="e.g. Sarah &amp; the kids">
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div>
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" required>
+          </div>
+          <div class="full">
+            <label for="address1">Street address</label>
+            <input id="address1" name="address1" autocomplete="address-line1" required>
+          </div>
+          <div class="full">
+            <label for="address2">Apt / unit (optional)</label>
+            <input id="address2" name="address2" autocomplete="address-line2">
+          </div>
+          <div>
+            <label for="city">City</label>
+            <input id="city" name="city" autocomplete="address-level2" required>
+          </div>
+          <div>
+            <label for="state">State</label>
+            <input id="state" name="state" autocomplete="address-level1" maxlength="2" placeholder="TX" required>
+          </div>
+          <div>
+            <label for="zip">ZIP</label>
+            <input id="zip" name="zip" autocomplete="postal-code" inputmode="numeric" required>
+          </div>
+          <div>
+            <label for="country">Country</label>
+            <input id="country" name="country" autocomplete="country-name" value="United States">
+          </div>
+          <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
+        </div>
+        <div class="form-foot">
+          <button class="btn" type="submit">Send my address</button>
+          <p class="form-note">Next: add the day to your calendar. We'll only use this to mail your card and share wedding updates.</p>
+        </div>
+      </form>
+      <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+  <footer class="std-foot">
+    Noah &amp; Bethany · Saturday, November 28, 2026 · <a href="index.html">nbperrodin.com</a>
+  </footer>
+  <script src="assets/config.js"></script>
+  <script src="assets/site.js"></script>
+  <script src="assets/florals.js"></script>
+</body>
+</html>

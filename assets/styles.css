@@ -140,6 +140,7 @@ input, select, textarea {
   background: var(--paper); font: inherit; font-size: 1rem; color: var(--ink);
 }
 input:focus, select:focus, textarea:focus { border-color: var(--pine); background: #fff; }
+[aria-invalid="true"] { border-color: #B5514A; background: #FBF1EF; }
 .form-foot { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
 .form-note { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
 .form-status { margin-top: 1rem; padding: 0.9rem 1rem; border-radius: var(--radius); font-size: 0.95rem; display: none; }
@@ -239,3 +240,5 @@ input:focus, select:focus, textarea:focus { border-color: var(--pine); backgroun
 .share-wreath .share-inner { position: relative; z-index: 2; width: 52%; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.8rem; }
 .share-wreath .share-inner .big { font-family: var(--display); font-size: clamp(1.25rem, 4vw, 2rem); color: var(--pine); line-height: 1.1; }
 .share-wreath .share-inner .btn { font-size: clamp(0.62rem, 2.4vw, 0.8rem); padding: 0.65rem 0.9rem; letter-spacing: 0.1em; white-space: normal; line-height: 1.3; max-width: 100%; }
+
+.thanks-banner { max-width: 640px; margin: 0 auto 1.4rem; text-align: center; }
