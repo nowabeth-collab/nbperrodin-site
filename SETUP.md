@@ -29,16 +29,20 @@ The same files also live on Noah's Mac in `Desktop/Noah Bethany Website/nbperrod
 
 ## Every Friday at 5 PM Central
 
-The script emails you **"Save-the-date list: N new RSVPs this week · N addresses to mail"** with the week's new RSVPs in a table and `save-the-date-mailing-list.csv` — every accepted guest's address that hasn't been marked as mailed. The `Mailing List` tab in the Sheet is refreshed at the same time. Nothing is sent on a week with no new RSVPs and nothing left to mail.
+The script emails you **"Invitation list: N new RSVPs this week · N addresses to mail"** with the week's new RSVPs in a table and `invitation-mailing-list.csv` — every accepted household's address that hasn't been marked as mailed. The `Mailing List` tab in the Sheet is refreshed at the same time. Nothing is sent on a week with no new RSVPs and nothing left to mail.
+
+Households are counted once: if someone replies twice (same street address or same email), or replies again after their card was marked sent, they don't reappear on the list.
 
 ## Mailing through Postable (the 5-minute Friday routine)
 
-Postable (account: nowabeth@gmail.com) prints, addresses, stamps and mails the cards. Both designs are saved there as projects — **"Upload Your Own Card"** (the 5x7 invitation, kraft envelope, calligraphy addressing, no Postable logo) and the **4x6 save-the-date postcard**.
+Postable (account: nowabeth@gmail.com) prints, addresses, stamps and mails the cards. The invitation is saved there as the project **"Wedding Invitation (5x7)"** (kraft envelope, calligraphy addressing, no Postable logo). A 4x6 save-the-date postcard project exists too, but since guests RSVP online before anything is mailed, the plan is invitations only.
 
 1. Save the CSV from the Friday email.
 2. Postable → **Contacts → Import spreadsheet** → upload it, name the group by date (e.g. "Batch Sep 19"). The CSV already has Postable's required headers.
 3. **Projects** → open the card → **Recipients** → select that group → Save and checkout → pay. They mail within 1–2 business days; USPS takes 2–6 more.
 4. Back in the Sheet, type today's date in each of those guests' **cardSent** cells so they drop off next week's list.
+
+Order one invitation to yourself first as a proof; it arrives in about a week. Then send the big batch with the `WELCOME` code.
 
 Pricing (2026): flat card $4.59 at 20+ (+$0.25 to hide their logo) + $0.82 stamp; postcard cheaper, stamp $0.65. Codes: `WELCOME` = 25% off the first order (save it for the big batch); seasonal codes appear in the site banner.
 
@@ -89,4 +93,4 @@ Edit `apps-script/Code.gs`, paste it into the Apps Script editor, save, then **D
 
 - Paste the Google Photos shared-album link into `assets/config.js` → `photoAlbumUrl` (Photos → Albums → the album → Share → Create link, with "Collaborate" on).
 - Wedding party photos: drop square-ish JPGs in `assets/photos/party/` and set each person's `photo` in `config.js`.
-- Send the RSVP link to guests, then run the Friday routine above: save-the-dates as addresses arrive, invitations by late September so they land before the October 17 reply-by date.
+- Run the Friday routine above as addresses arrive. The first big invitation batch should go out by late September so it lands well before the October 17 reply-by date.

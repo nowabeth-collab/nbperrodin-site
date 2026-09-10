@@ -1,5 +1,5 @@
 /**
- * nbperrodin.com — RSVP collector + weekly save-the-date address digest
+ * nbperrodin.com — RSVP collector + weekly invitation address digest
  * ======================================================================
  * One script, two jobs, all running in Google's cloud (no laptop needed):
  *
@@ -9,7 +9,7 @@
  *
  *   2. sendWeeklyDigest() Every Friday at 5 PM Central: emails Noah & Bethany the
  *                        week's new RSVPs plus a ready-to-upload CSV of every accepted
- *                        guest's mailing address that still needs a save-the-date card.
+ *                        guest's mailing address that still needs an invitation.
  *                        The CSV has Postable's required headers, so it imports straight into
  *                        Postable (Contacts → Import spreadsheet), which prints, addresses, stamps
  *                        and mails the cards. The "Mailing List" tab in the Sheet is refreshed too.
@@ -49,7 +49,7 @@ var TIME_ZONE = "America/Chicago";
 var COLUMNS = [
   "submittedAt", "attending", "firstName", "lastName", "guestCount", "guestNames", "email", "phone",
   "address1", "address2", "city", "state", "zip", "country", "note", "source",
-  "cardSent"   // you fill this in by hand once a save-the-date card has gone out
+  "cardSent"   // you fill this in by hand once the invitation has gone out
 ];
 
 /* ================================================================
@@ -146,7 +146,7 @@ function confirmationHtml_(first, yes) {
       "</td></tr></table>" +
       "<div style=\"text-align:center;padding:22px 0 6px;\">" + button(CALENDAR_LINK, "Add to calendar", true) + button(SITE, "Visit nbperrodin.com", false) + "</div>" +
       "<p style=\"margin:18px 0 0;" + sans + "font-size:15px;line-height:1.7;color:" + ink + ";\">" +
-      "<strong style=\"color:" + pine + ";\">What&rsquo;s next:</strong> a save-the-date card and your formal invitation will arrive in the mail. " +
+      "<strong style=\"color:" + pine + ";\">What&rsquo;s next:</strong> your invitation will arrive in the mail. " +
       "Directions, our registry and the story of how it all started are on the website, and if anything changes on your end, just reply to this email.</p>"
     : "<p style=\"margin:0 0 14px;" + sans + "font-size:16px;line-height:1.6;color:" + ink + ";\">Hi " + esc_(first) + ",</p>" +
       "<p style=\"margin:0 0 14px;" + sans + "font-size:16px;line-height:1.6;color:" + ink + ";\">Thank you for letting us know. We&rsquo;re sorry you can&rsquo;t be there on November 28 &mdash; you&rsquo;ll be missed, and we&rsquo;re grateful you took the time to respond.</p>" +
@@ -265,7 +265,7 @@ function digest_(advanceMarker) {
   var freshNo = fresh.filter(function (r) { return r.attending === "no"; });
   var sinceText = Utilities.formatDate(since, TIME_ZONE, "EEE, MMM d");
   var subject = (advanceMarker ? "" : "[preview] ") +
-    "Save-the-date list: " + fresh.length + " new RSVP" + (fresh.length === 1 ? "" : "s") + " this week · " +
+    "Invitation list: " + fresh.length + " new RSVP" + (fresh.length === 1 ? "" : "s") + " this week · " +
     pending.length + " address" + (pending.length === 1 ? "" : "es") + " to mail";
 
   var html = "<div style=\"font-family:Georgia,serif;color:#3A3833;max-width:640px\">" +
@@ -273,7 +273,7 @@ function digest_(advanceMarker) {
     "<p style=\"margin:0 0 14px;color:#7A736A\">Since " + sinceText + ": <strong>" + freshYes.length + " accepted</strong>, " + freshNo.length + " declined. " +
     "Overall: " + totals_(rows) + ".</p>" +
     (fresh.length ? table_(fresh) : "<p><em>No new RSVPs this week.</em></p>") +
-    "<h2 style=\"font-weight:normal;margin:22px 0 6px\">Save-the-date cards still to mail: " + pending.length + "</h2>" +
+    "<h2 style=\"font-weight:normal;margin:22px 0 6px\">Invitations still to mail: " + pending.length + "</h2>" +
     "<p style=\"margin:0 0 10px\">The attached CSV has every accepted guest's address that hasn't been marked <code>cardSent</code> yet — " +
     "import it into Postable (Contacts → Import spreadsheet → pick the saved card → send). The same list lives in the " +
     "<a href=\"" + url + "\">“Mailing List” tab of the Sheet</a>.</p>" +
@@ -282,11 +282,11 @@ function digest_(advanceMarker) {
 
   var text = "This week's RSVPs (since " + sinceText + "): " + freshYes.length + " accepted, " + freshNo.length + " declined. Overall: " + totals_(rows) + ".\n\n" +
     fresh.map(function (r) { return line_(r); }).join("\n") + "\n\n" +
-    "Save-the-date cards still to mail: " + pending.length + " (CSV attached)\nSheet: " + url;
+    "Invitations still to mail: " + pending.length + " (CSV attached)\nSheet: " + url;
 
   MailApp.sendEmail({
     to: NOTIFY_EMAIL, cc: NOTIFY_CC, subject: subject, body: text, htmlBody: html, name: "nbperrodin.com",
-    attachments: [Utilities.newBlob(csv_([LIST_HEADER].concat(pending.map(listRow_))), "text/csv", "save-the-date-mailing-list.csv")]
+    attachments: [Utilities.newBlob(csv_([LIST_HEADER].concat(pending.map(listRow_))), "text/csv", "invitation-mailing-list.csv")]
   });
   Logger.log("Digest sent: " + subject);
 }
@@ -305,9 +305,27 @@ function buildMailingList(rows) {
   return accepted.length;
 }
 
-/** Accepted guests with an address and no cardSent yet. */
+/** Accepted guests with an address and no cardSent yet — one per household.
+ *  If the same household replies twice (same street address, or same email), only the first row counts,
+ *  and a household that has already been marked cardSent is never listed again. */
 function pendingCards_(rows) {
-  return (rows || readRows_()).filter(function (r) { return r.attending === "yes" && r.address1 && !r.cardSent; });
+  rows = rows || readRows_();
+  var done = {}, seen = {}, out = [];
+  var keys = function (r) {
+    var k = [];
+    if (r.address1) k.push("a:" + String(r.address1 + "|" + r.zip).toLowerCase().replace(/[^a-z0-9|]/g, ""));
+    if (r.email) k.push("e:" + String(r.email).toLowerCase().trim());
+    return k;
+  };
+  rows.forEach(function (r) { if (r.cardSent) keys(r).forEach(function (k) { done[k] = true; }); });
+  rows.forEach(function (r) {
+    if (r.attending !== "yes" || !r.address1 || r.cardSent) return;
+    var k = keys(r);
+    if (k.some(function (x) { return done[x] || seen[x]; })) return;
+    k.forEach(function (x) { seen[x] = true; });
+    out.push(r);
+  });
+  return out;
 }
 
 function listRow_(r) {
