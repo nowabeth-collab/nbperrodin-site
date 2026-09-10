@@ -14,21 +14,21 @@
   *, *::before, *::after { box-sizing: border-box; }
   @page { size: 5.25in 7.25in; margin: 0; }
   html, body { margin: 0; }
-  :root { --gold: #B9995F; --sage: #8A9878; --ink: #3B3A37; --soft: #6F6A62; --paper: #FBF8F2; }
+  :root { --gold: #AF9466; --sage: #7E826B; --ink: #3C3B3B; --soft: #6F6A62; --paper: #FBF9F5; }
   body { width: 5.25in; height: 7.25in; background: var(--paper); font-family: 'Cormorant Garamond', Georgia, serif; color: var(--ink); overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .card { position: relative; width: 5.25in; height: 7.25in; }
   /* soft watercolor-paper wash */
   .card::before { content: ""; position: absolute; inset: 0; background:
-      radial-gradient(ellipse at 20% 15%, rgba(222,206,184,0.13), transparent 55%),
-      radial-gradient(ellipse at 85% 85%, rgba(222,206,184,0.12), transparent 55%),
-      radial-gradient(ellipse at 60% 45%, rgba(255,255,255,0.5), transparent 60%); }
+      radial-gradient(ellipse at 50% 48%, rgba(255,255,255,0.85), transparent 62%),
+      radial-gradient(ellipse at 15% 12%, rgba(226,214,200,0.10), transparent 50%),
+      radial-gradient(ellipse at 88% 90%, rgba(226,214,200,0.10), transparent 50%); }
   /* gold double-line arch frame */
   .frame, .frame::after { position: absolute; border: 1px solid var(--gold); border-radius: 1.85in 1.85in 0 0; }
   .frame { left: 0.78in; right: 0.78in; top: 0.62in; bottom: 0.62in; }
   .frame::after { content: ""; left: 0.055in; right: 0.055in; top: 0.055in; bottom: 0.055in; border-radius: 1.8in 1.8in 0 0; }
   .floral { position: absolute; display: block; }
-  .tl { left: -0.28in; top: -0.26in; width: 3.0in; }
-  .br { right: -0.3in; bottom: -0.28in; width: 3.05in; }
+  .tl { left: -0.3in; top: -0.28in; width: 3.3in; }
+  .br { right: -0.32in; bottom: -0.3in; width: 3.4in; }
   .content { position: absolute; left: 0.9in; right: 0.9in; top: 1.32in; bottom: 0.8in; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
   .caps { letter-spacing: 0.22em; text-transform: uppercase; font-weight: 500; }
   .eyebrow { font-size: 8pt; line-height: 1.6; color: var(--ink); }
@@ -81,7 +81,7 @@
       <div class="side caps">At 5:00 PM</div>
     </div>
     <div class="script">The celebration will be held at</div>
-    <svg class="heart" viewBox="0 0 24 22" aria-hidden="true"><path fill="#B9995F" d="M12 21.3 2.6 12.1A6 6 0 0 1 11 3.5l1 1 1-1a6 6 0 0 1 8.4 8.6z"/></svg>
+    <svg class="heart" viewBox="0 0 24 22" aria-hidden="true"><path fill="#AF9466" d="M12 21.3 2.6 12.1A6 6 0 0 1 11 3.5l1 1 1-1a6 6 0 0 1 8.4 8.6z"/></svg>
     <div class="venue caps">Camp Hosea<br><span class="addr">17476 FM 3090<br>Anderson, TX 77830</span></div>
     <div class="foot">Reception to follow</div>
   </div>
