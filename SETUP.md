@@ -72,9 +72,10 @@ Visiting the web app URL (the `formEndpoint`) in a browser shows the current tot
 
 - `invitation-5x7.pdf` — print-ready, 2 pages (front, back), 5.25 × 7.25 in including 1/8 in bleed. Order as a "5x7 flat card, full bleed, printed both sides" (Vistaprint, Shutterfly, Minted "upload your design", or a local print shop). A5/5x7 envelopes fit it.
 - `preview-front.jpg`, `preview-back.jpg` — quick look.
-- `front.html`, `back.html` — editable source. The RSVP-by date (October 17) and the details copy live in `back.html`; the QR code points to nbperrodin.com/rsvp (`assets/qr-rsvp.png`).
+- `front-original.png` — the front as printed: the design Bethany's sister made (used as-is). `front.html` is a recreation of it in editable form, in case the text ever needs to change.
+- `back.html` — editable source for the back. The RSVP-by date (October 17) and the details copy live here; the QR code points to nbperrodin.com/rsvp (`assets/qr-rsvp.png`).
 - `postable-front-5x7-bleed.png`, `postable-back-5x7-bleed.png` (from `back-postable.html`) — the uploads used in the Postable project. Postable's back layout is a 5.25 × 6.4 in image with a white strip below, which is why the back has its own variant.
-- The front follows the original design by Bethany's sister (gold arch frame, Bodoni Moda names, Allura script, three-column date block) with the site's own florals. Fonts: Bodoni Moda, Allura, Cormorant Garamond, Jost (all on Google Fonts).
+- Fonts used in the editable files: Bodoni Moda, Allura, Cormorant Garamond, Jost (all on Google Fonts). The back's colors are sampled from the original front so the two sides match.
 
 Mail invitations 6–8 weeks before the wedding (early-to-mid October).
 
