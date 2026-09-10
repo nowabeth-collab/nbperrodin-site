@@ -73,7 +73,7 @@ Visiting the web app URL (the `formEndpoint`) in a browser shows the current tot
 - `invitation-5x7.pdf` — print-ready, 2 pages (front, back), 5.25 × 7.25 in including 1/8 in bleed. Order as a "5x7 flat card, full bleed, printed both sides" (Vistaprint, Shutterfly, Minted "upload your design", or a local print shop). A5/5x7 envelopes fit it.
 - `preview-front.jpg`, `preview-back.jpg` — quick look.
 - `front.html`, `back.html` — editable source. The RSVP-by date (October 17) and the details copy live in `back.html`; the QR code points to nbperrodin.com/rsvp (`assets/qr-rsvp.png`).
-- `postable-front-5x7-bleed.jpg`, `postable-back-5x7-bleed.jpg` (from `back-postable.html`) — the uploads used in the Postable project. Postable's back layout is a 5.25 × 6.4 in image with a white strip below, which is why the back has its own variant.
+- `postable-front-5x7-bleed.jpg`, `postable-back-5x7-bleed.png` (from `back-postable.html`) — the uploads used in the Postable project. Postable's back layout is a 5.25 × 6.4 in image with a white strip below, which is why the back has its own variant.
 
 Mail invitations 6–8 weeks before the wedding (early-to-mid October).
 
