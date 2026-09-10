@@ -1,47 +1,90 @@
 <!-- Formal invitation — FRONT.
      5.25in x 7.25in = a 5x7 flat card plus 1/8in bleed on every side (the printer trims to 5 x 7).
      Keep anything important at least 1/4in from the edge of this file.
+     Layout and type follow the original design by Bethany's sister (gold arch frame, Didone names,
+     script "and", three-column date block, gold heart) using the site's own watercolor florals.
      Open this file in a browser to preview; invitation-5x7.pdf is the print-ready export. -->
 <!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
 <title>Invitation — front</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;500&family=Allura&family=Cormorant+Garamond:wght@400;500;600&display=swap">
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   @page { size: 5.25in 7.25in; margin: 0; }
   html, body { margin: 0; }
-  body { width: 5.25in; height: 7.25in; background: #F4F0E9; font-family: 'Jost', Helvetica, Arial, sans-serif; color: #4E5B44; overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .card { position: relative; width: 5.25in; height: 7.25in; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0.3in 0.55in 0.75in; }
-  .arch { width: 3.7in; display: block; margin: 0 auto 0.1in; }
-  .eyebrow { font-size: 7.5pt; letter-spacing: 0.3em; text-transform: uppercase; color: #B98E8C; font-weight: 400; margin: 0 0 12pt; }
-  .name { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 31pt; font-weight: 500; line-height: 1.05; letter-spacing: 0.02em; }
-  .and { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 16pt; color: #B98E8C; margin: 3pt 0; }
-  .invite { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 13.5pt; color: #7A736A; margin-top: 12pt; }
-  .rule { width: 0.45in; height: 1px; background: #B98E8C; margin: 14pt auto; }
-  .when { font-family: 'Cormorant Garamond', Georgia, serif; line-height: 1.5; color: #4E5B44; }
-  .when .date { font-size: 17pt; font-weight: 500; letter-spacing: 0.02em; }
-  .when .time { font-size: 13.5pt; font-style: italic; color: #7A736A; }
-  .where { margin-top: 14pt; font-size: 8.5pt; letter-spacing: 0.24em; text-transform: uppercase; color: #3A3833; line-height: 1.9; }
-  .where .addr { font-size: 7.5pt; letter-spacing: 0.18em; color: #7A736A; }
-  .foot { margin-top: 12pt; font-size: 7.5pt; letter-spacing: 0.24em; text-transform: uppercase; color: #B98E8C; }
-  .corner { position: absolute; right: -0.18in; bottom: -0.2in; width: 2.0in; }
+  :root { --gold: #B9995F; --sage: #8A9878; --ink: #3B3A37; --soft: #6F6A62; --paper: #F6F2EA; }
+  body { width: 5.25in; height: 7.25in; background: var(--paper); font-family: 'Cormorant Garamond', Georgia, serif; color: var(--ink); overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .card { position: relative; width: 5.25in; height: 7.25in; }
+  /* soft watercolor-paper wash */
+  .card::before { content: ""; position: absolute; inset: 0; background:
+      radial-gradient(ellipse at 20% 15%, rgba(214,196,172,0.22), transparent 55%),
+      radial-gradient(ellipse at 85% 85%, rgba(214,196,172,0.20), transparent 55%),
+      radial-gradient(ellipse at 60% 45%, rgba(255,255,255,0.35), transparent 60%); }
+  /* gold double-line arch frame */
+  .frame, .frame::after { position: absolute; border: 1px solid var(--gold); border-radius: 1.85in 1.85in 0 0; }
+  .frame { left: 0.78in; right: 0.78in; top: 0.62in; bottom: 0.62in; }
+  .frame::after { content: ""; left: 0.055in; right: 0.055in; top: 0.055in; bottom: 0.055in; border-radius: 1.8in 1.8in 0 0; }
+  .floral { position: absolute; display: block; }
+  .tl { left: -0.28in; top: -0.26in; width: 3.0in; }
+  .br { right: -0.3in; bottom: -0.28in; width: 3.05in; }
+  .content { position: absolute; left: 0.9in; right: 0.9in; top: 1.32in; bottom: 0.8in; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+  .caps { letter-spacing: 0.22em; text-transform: uppercase; font-weight: 500; }
+  .eyebrow { font-size: 8pt; line-height: 1.6; color: var(--ink); }
+  .name { font-family: 'Bodoni Moda', 'Didot', 'Bodoni 72', Georgia, serif; font-weight: 400; font-size: 46pt; line-height: 1; color: var(--sage); letter-spacing: 0.01em; }
+  .surname { font-size: 7.5pt; letter-spacing: 0.3em; text-transform: uppercase; color: var(--soft); margin-top: 3pt; }
+  body:not(.with-surnames) .surname { display: none; }
+  .and { display: flex; align-items: center; gap: 0.12in; margin: 2pt 0; }
+  .and span { font-family: 'Allura', 'Snell Roundhand', cursive; font-size: 21pt; color: var(--gold); line-height: 1; padding-bottom: 3pt; }
+  .and i { display: block; width: 0.42in; height: 1px; background: var(--gold); }
+  .invite { font-size: 8.5pt; line-height: 1.6; color: var(--ink); }
+  /* three-column date block */
+  .when { display: flex; align-items: stretch; justify-content: center; width: 100%; }
+  .when .side { flex: 1; display: flex; align-items: center; justify-content: center; border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold); margin: 0.16in 0; font-size: 8.5pt; }
+  .when .mid { flex: 0 0 1.25in; border-left: 1px solid var(--gold); border-right: 1px solid var(--gold); padding: 0.02in 0; line-height: 1.15; }
+  .when .month { font-size: 8pt; }
+  .when .day { font-family: 'Bodoni Moda', 'Didot', Georgia, serif; font-size: 38pt; color: var(--gold); line-height: 1; margin: 2pt 0 1pt; }
+  .when .day sup { font-size: 9pt; letter-spacing: 0.1em; text-transform: uppercase; vertical-align: 1.1em; margin-left: 2pt; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; }
+  .when .year { font-size: 8.5pt; letter-spacing: 0.2em; }
+  .script { font-family: 'Allura', 'Snell Roundhand', cursive; font-size: 17pt; color: var(--gold); line-height: 1; }
+  .heart { width: 0.13in; height: 0.13in; display: block; }
+  .venue { font-size: 9pt; line-height: 1.75; color: var(--ink); }
+  .venue .addr { font-size: 8pt; letter-spacing: 0.2em; }
+  .foot { width: 2.4in; border-top: 1px solid var(--gold); padding-top: 7pt; font-size: 7.5pt; letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
 </style>
 </head>
 <body>
 <div class="card">
-  <img class="arch" src="../assets/florals/arch.webp" alt="">
-  <div class="eyebrow">Together with their families</div>
-  <div class="name">Bethany Kline</div>
-  <div class="and">and</div>
-  <div class="name">Noah Perrodin</div>
-  <div class="invite">invite you to celebrate their marriage</div>
-  <div class="rule"></div>
-  <div class="when"><span class="date">Saturday, November 28, 2026</span><br><span class="time">at 5:00 in the evening</span></div>
-  <div class="where">Camp Hosea<br><span class="addr">17476 FM 3090 &middot; Anderson, Texas</span></div>
-  <div class="foot">Reception to follow</div>
-  <img class="corner" src="../assets/florals/corner-br.webp" alt="">
+  <div class="frame"></div>
+  <img class="floral tl" src="../assets/florals/corner-tl.webp" alt="">
+  <img class="floral br" src="../assets/florals/corner-br.webp" alt="">
+  <div class="content">
+    <div class="eyebrow caps">Together<br>with their families</div>
+    <div>
+      <div class="name">Bethany</div>
+      <div class="surname">Kline</div>
+    </div>
+    <div class="and"><i></i><span>and</span><i></i></div>
+    <div>
+      <div class="name">Noah</div>
+      <div class="surname">Perrodin</div>
+    </div>
+    <div class="invite caps">Invite you to celebrate<br>their wedding</div>
+    <div class="when">
+      <div class="side caps">Saturday</div>
+      <div class="mid">
+        <div class="month caps">November</div>
+        <div class="day">28<sup>th</sup></div>
+        <div class="year caps">2026</div>
+      </div>
+      <div class="side caps">At 5:00 PM</div>
+    </div>
+    <div class="script">The celebration will be held at</div>
+    <svg class="heart" viewBox="0 0 24 22" aria-hidden="true"><path fill="#B9995F" d="M12 21.3 2.6 12.1A6 6 0 0 1 11 3.5l1 1 1-1a6 6 0 0 1 8.4 8.6z"/></svg>
+    <div class="venue caps">Camp Hosea<br><span class="addr">17476 FM 3090<br>Anderson, TX 77830</span></div>
+    <div class="foot">Reception to follow</div>
+  </div>
 </div>
 </body>
 </html>
