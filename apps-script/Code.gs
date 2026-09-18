@@ -226,6 +226,26 @@ function guestNames_() {
   return out.sort(function (a, b) { return a.localeCompare(b); });
 }
 
+/** After a Postable batch has been paid for: stamps today's date into cardSent for every accepted row
+ *  with an address that was submitted on or before BATCH_CUTOFF and hasn't been marked yet.
+ *  Set BATCH_CUTOFF to the moment the address list was exported, then run this from the editor. */
+var BATCH_CUTOFF = "2026-09-18T14:26:21Z";
+function markInvitationsSent() {
+  var sheet = getSheet_();
+  var values = sheet.getDataRange().getValues();
+  var header = values[0].map(String);
+  var col = header.indexOf("cardSent") + 1, iAtt = header.indexOf("attending"), iAddr = header.indexOf("address1"),
+      iSub = header.indexOf("submittedAt"), iSent = header.indexOf("cardSent");
+  var cutoff = new Date(BATCH_CUTOFF), today = Utilities.formatDate(new Date(), TIME_ZONE, "yyyy-MM-dd"), n = 0;
+  for (var r = 1; r < values.length; r++) {
+    var row = values[r], sub = parseDate_(row[iSub]);
+    if (String(row[iAtt]).toLowerCase() !== "yes" || !String(row[iAddr]).trim() || String(row[iSent]).trim() || !sub || sub > cutoff) continue;
+    sheet.getRange(r + 1, col).setValue(today); n++;
+  }
+  buildMailingList();
+  Logger.log("Marked " + n + " rows as sent (" + today + ").");
+}
+
 /** Run once from the editor: creates/repairs the header row and the Mailing List tab. */
 function setup() {
   var sheet = getSheet_();
