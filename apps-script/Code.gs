@@ -40,6 +40,7 @@
 var SHEET_ID = "1lB1tkCrp1VGeyig1z1_khrTo9GwFSUGR7MVLYqRZN4s"; // the "Wedding RSVPs" Google Sheet (nowabeth@gmail.com)
 var SHEET_NAME = "RSVPs";
 var LIST_SHEET_NAME = "Mailing List";
+var GIFTS_SHEET_NAME = "Gifts";                 // log gifts here; thank-you cards still to send show up in the Friday email
 var NOTIFY_EMAIL = "nowabeth@gmail.com";        // where RSVP alerts + the Friday digest go (set to "" to disable)
 var NOTIFY_CC = "noahvideographer@gmail.com";    // also copy Noah
 var SEND_GUEST_CONFIRMATION = true;              // email each guest a confirmation (sent from the account that owns this script)
@@ -246,6 +247,33 @@ function markInvitationsSent() {
   Logger.log("Marked " + n + " rows as sent (" + today + ").");
 }
 
+/** Gifts tab: one row per gift. Fill in "Thank-you sent" once the card has gone out. */
+var GIFTS_HEADER = ["Received", "From", "Gift", "Thank-you sent", "Notes"];
+function setupGifts() {
+  var ss = SpreadsheetApp.openById(SHEET_ID);
+  var sh = ss.getSheetByName(GIFTS_SHEET_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(GIFTS_SHEET_NAME);
+    sh.getRange(1, 1, 1, GIFTS_HEADER.length).setValues([GIFTS_HEADER]).setFontWeight("bold");
+    sh.setFrozenRows(1);
+    sh.getRange(2, 1, 2, 5).setValues([
+      ["2026-10", "Simone Motley", "", "", ""],
+      ["2026-10", "Debbie & Eric Harrison", "", "", ""]
+    ]);
+    sh.setColumnWidths(1, 5, 160);
+  }
+  return sh;
+}
+/** Gifts that still need a thank-you card. */
+function pendingThankYous_() {
+  var sh = SpreadsheetApp.openById(SHEET_ID).getSheetByName(GIFTS_SHEET_NAME);
+  if (!sh) return [];
+  var v = sh.getDataRange().getValues(); if (v.length < 2) return [];
+  var h = v[0].map(String), iFrom = h.indexOf("From"), iGift = h.indexOf("Gift"), iSent = h.indexOf("Thank-you sent");
+  return v.slice(1).filter(function (r) { return String(r[iFrom]).trim() && !String(r[iSent]).trim(); })
+          .map(function (r) { return { from: String(r[iFrom]).trim(), gift: String(r[iGift]).trim() }; });
+}
+
 /** Run once from the editor: creates/repairs the header row and the Mailing List tab. */
 function setup() {
   var sheet = getSheet_();
@@ -278,7 +306,8 @@ function digest_(advanceMarker) {
 
   buildMailingList(rows);
   if (advanceMarker) props.setProperty("LAST_DIGEST_AT", now.toISOString());
-  if (!fresh.length && !pending.length) { Logger.log("Nothing new and no cards waiting — no digest sent."); return; }
+  var thanks = pendingThankYous_();
+  if (!fresh.length && !pending.length && !thanks.length) { Logger.log("Nothing new and no cards waiting — no digest sent."); return; }
   if (!NOTIFY_EMAIL) return;
 
   var freshYes = fresh.filter(function (r) { return r.attending === "yes"; });
@@ -298,11 +327,16 @@ function digest_(advanceMarker) {
     "import it into Postable (Contacts → Import spreadsheet → pick the saved card → send). The same list lives in the " +
     "<a href=\"" + url + "\">“Mailing List” tab of the Sheet</a>.</p>" +
     "<p style=\"color:#7A736A;font-size:13px\">Once you've sent a batch through Postable, type a date in each guest's cardSent column on the RSVPs tab so they drop off next week's list. " +
-    "Declines are never included.</p></div>";
+    "Declines are never included.</p>" +
+    (thanks.length ? "<h2 style=\"font-weight:normal;margin:22px 0 6px\">Thank-you cards to send: " + thanks.length + "</h2>" +
+      "<p style=\"margin:0 0 10px\">" + thanks.map(function (t) { return esc_(t.from) + (t.gift ? " &mdash; " + esc_(t.gift) : ""); }).join("<br>") +
+      "</p><p style=\"color:#7A736A;font-size:13px\">From the Gifts tab. Put a date in \"Thank-you sent\" once the card is in the mail.</p>" : "") +
+    "</div>";
 
   var text = "This week's RSVPs (since " + sinceText + "): " + freshYes.length + " accepted, " + freshNo.length + " declined. Overall: " + totals_(rows) + ".\n\n" +
     fresh.map(function (r) { return line_(r); }).join("\n") + "\n\n" +
-    "Invitations still to mail: " + pending.length + " (CSV attached)\nSheet: " + url;
+    "Invitations still to mail: " + pending.length + " (CSV attached)\n" +
+    (thanks.length ? "Thank-you cards to send: " + thanks.map(function (t) { return t.from; }).join(", ") + "\n" : "") + "Sheet: " + url;
 
   MailApp.sendEmail({
     to: NOTIFY_EMAIL, cc: NOTIFY_CC, subject: subject, body: text, htmlBody: html, name: "nbperrodin.com",
