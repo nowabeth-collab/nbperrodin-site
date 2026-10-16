@@ -230,7 +230,7 @@ function guestNames_() {
 /** After a Postable batch has been paid for: stamps today's date into cardSent for every accepted row
  *  with an address that was submitted on or before BATCH_CUTOFF and hasn't been marked yet.
  *  Set BATCH_CUTOFF to the moment the address list was exported, then run this from the editor. */
-var BATCH_CUTOFF = "2026-09-18T14:26:21Z";
+var BATCH_CUTOFF = "2026-10-16T18:10:39Z";
 function markInvitationsSent() {
   var sheet = getSheet_();
   var values = sheet.getDataRange().getValues();
