@@ -100,8 +100,30 @@
   const ics = document.getElementById("ics-link");
   if (ics) ics.href = S.event.icsPath;
 
+  /* ---------- RSVPs closed: swap the form for a short note ---------- */
+  let form = document.getElementById("std-form");
+  if (form && S.rsvpClosed) {
+    const mail = S.rsvpContactEmail ? ` or email <a href="mailto:${S.rsvpContactEmail}">${S.rsvpContactEmail}</a>` : "";
+    const note = document.createElement("div");
+    note.className = "form-card has-corner rsvp-closed";
+    note.innerHTML = `<div class="corner-br" data-floral="br"></div>
+      <p class="eyebrow">RSVPs are closed</p>
+      <h3>Thank you to everyone who replied!</h3>
+      <p>Replies closed ${escapeHtml(S.rsvpClosedBy || "")} and we've given the venue our final headcount. If your plans have changed, or life got in the way and you never replied, just text Noah or Bethany${mail} and we'll take care of it.</p>
+      <p class="form-note">Invitations are in the mail. Directions, the registry and the calendar invite are all here on <a href="index.html">nbperrodin.com</a>.</p>`;
+    form.replaceWith(note);
+    form = null;
+    // Page copy that pointed at the form
+    const lead = document.querySelector(".std-top .lead");
+    if (lead) lead.textContent = "We're getting married, and we're so grateful to everyone who let us know they'll be there.";
+    const rsvpHead = document.querySelector("#rsvp h2");
+    if (rsvpHead) { rsvpHead.textContent = "See you on the 28th!"; const p = rsvpHead.nextElementSibling; if (p && p.tagName === "P") p.textContent = "Our RSVP window has closed, but everything you need for the day lives right here."; }
+    document.querySelectorAll(".page-head > p").forEach((p) => { if (/RSVP below/i.test(p.textContent)) p.textContent = "Invitations are in the mail. Block off the Saturday after Thanksgiving — the details are below."; });
+    const cue = document.querySelector(".scroll-cue");
+    if (cue) cue.remove();
+  }
+
   /* ---------- Save-the-date form ---------- */
-  const form = document.getElementById("std-form");
   if (form) {
     const status = document.getElementById("form-status");
     const submitBtn = form.querySelector('button[type="submit"]');

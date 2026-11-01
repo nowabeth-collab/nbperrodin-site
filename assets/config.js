@@ -34,6 +34,15 @@ window.SITE = {
   // After you deploy apps-script/Code.gs, paste the URL that ends in /exec
   formEndpoint: "https://script.google.com/macros/s/AKfycbzBRIuQuFdxXj_Tz5WrOFFpaPe8LoP9FVgICaea5GvOTAcsnubcSfypiQWGE8alaPk3zQ/exec",
 
+  // --- RSVP window --------------------------------------------
+  // RSVPs closed October 17. While rsvpClosed is true the form on /rsvp and
+  // /save-the-date is replaced with a short "RSVPs are closed — text us" note.
+  // Flip to false to reopen the form. Late replies can still be typed straight
+  // into the RSVPs sheet by hand.
+  rsvpClosed: true,
+  rsvpClosedBy: "October 17",
+  rsvpContactEmail: "nowabeth@gmail.com",
+
   // --- Registry ----------------------------------------------
   registry: [
     {

@@ -18,6 +18,7 @@ The same files also live on Noah's Mac in `Desktop/Noah Bethany Website/nbperrod
 
 - **nbperrodin.com** — the website.
 - **nbperrodin.com/rsvp** (also `/std` and `/savethedate`) — the standalone RSVP page. Text or email this one to guests. After they submit, it drops them on the save-the-date page with the calendar buttons.
+  - **RSVPs closed Nov 1, 2026.** `rsvpClosed: true` in `assets/config.js` swaps the form (on `/rsvp` and `/save-the-date`) for a "RSVPs are closed — text Noah or Bethany" note. Set it to `false` to reopen. Late replies: type them straight into the `RSVPs` tab (the sheet, digest and guest list keep working).
 - **nbperrodin.com/photos** — where the QR codes in `qr/` point. Guests land on a page with a button to the shared album.
 
 ## What happens when a guest RSVPs
