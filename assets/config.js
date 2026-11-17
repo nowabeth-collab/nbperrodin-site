@@ -59,7 +59,11 @@ window.SITE = {
   showGuestList: true,
 
   // --- Guest photo sharing (QR code points to /photos) -------
-  // Create a shared album in Google Photos → Share → "Get link", paste it here.
+  // Guests take or pick photos on /photos and they land in the Google Drive folder
+  // "Wedding Guest Photos". Paste the web app URL (ends in /exec) from deploying
+  // apps-script/PhotoUpload.gs. Until it's set, /photos shows "opens soon".
+  photoUploadEndpoint: "https://script.google.com/macros/s/AKfycbwDMI8TSpyrb5EzfrfowsoIt6UieFuKqBg4DqIUJU1LIG4rzNHtwqTYwoQE3GDWNDaxNg/exec",
+  // Optional: a Google Photos shared album link, shown as a second option under the uploader.
   photoAlbumUrl: "PASTE_YOUR_GOOGLE_PHOTOS_SHARED_ALBUM_LINK_HERE",
 
   // --- Wedding party ------------------------------------------
